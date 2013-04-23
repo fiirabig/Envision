@@ -3,7 +3,13 @@ include(../Core/common_plugin.pri)
 
 DEFINES += JAVAEXPORT_LIBRARY
 win32:LIBS += -llogger \
-    -lselftest
+    -lselftest \
+    -lmodelbase \
+    -loomodel \
+    -lvisualizationbase \
+    -linteractionbase \
+    -loovisualization \
+    -loointeraction
 
 HEADERS += src/precompiled.h \
     src/JavaExportException.h \
