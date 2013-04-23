@@ -27,8 +27,12 @@
 #ifndef PRECOMPILED_JAVAEXPORT_H_
 #define PRECOMPILED_JAVAEXPORT_H_
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
+#include "OOInteraction/src/precompiled.h"
+#include "InteractionBase/src/precompiled.h"
+#include "OOVisualization/src/precompiled.h"
+#include "VisualizationBase/src/precompiled.h"
+#include "OOModel/src/precompiled.h"
+#include "ModelBase/src/precompiled.h"
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
