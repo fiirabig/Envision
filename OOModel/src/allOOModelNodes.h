@@ -58,6 +58,7 @@
 #include "expressions/NullLiteral.h"
 #include "expressions/ThisExpression.h"
 #include "expressions/NewExpression.h"
+#include "expressions/DeleteExpression.h"
 #include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
