@@ -26,11 +26,113 @@
 
 #include "javaexport.h"
 #include "SelfTest/src/SelfTestSuite.h"
+#include "OOModel/src/allOOModelNodes.h"
+#include "SourceBuilder.h"
+using namespace OOModel;
 
 namespace JavaExport {
 
 TEST(JavaExport, SimpleTest)
 {
+	Model::Model* model = new Model::Model();
+	auto prj = dynamic_cast<Project*> (model->createRoot("Project"));
+	model->beginModification(prj, "create a few classes");
+
+	Class* baseClass = new Class("BaseClass",Visibility::PUBLIC);
+		prj->classes()->append(baseClass);
+
+	Class* testClass = new Class("TestClass",Visibility::PUBLIC);
+		testClass->baseClasses()->append(new ReferenceExpression("BaseClass"));
+		prj->classes()->append(testClass);
+
+	Class* genericClassWithNoBounds = new Class("GenericClassWithNoBounds",Visibility::PUBLIC);
+		prj->classes()->append(genericClassWithNoBounds);
+		auto genericTypeWithNoBounds = new FormalTypeArgument("T",nullptr,nullptr);
+		genericClassWithNoBounds->typeArguments()->append(genericTypeWithNoBounds);
+
+	Class* genericClassWith2TypeArgs = new Class("GenericClassWith2TypeArgs",Visibility::PUBLIC);
+		prj->classes()->append(genericClassWith2TypeArgs);
+		auto genericTypeWithNoBounds1 = new FormalTypeArgument("T",nullptr,nullptr);
+		genericClassWith2TypeArgs->typeArguments()->append(genericTypeWithNoBounds1);
+		auto genericTypeWithNoBounds2 = new FormalTypeArgument("G",nullptr,nullptr);
+		genericClassWith2TypeArgs->typeArguments()->append(genericTypeWithNoBounds2);
+
+	Class* genericClassWith3TypeArgs = new Class("GenericClassWith3TypeArgs",Visibility::PUBLIC);
+		prj->classes()->append(genericClassWith3TypeArgs);
+		auto genericTypeWithNoBounds1a = new FormalTypeArgument("T",nullptr,nullptr);
+		genericClassWith3TypeArgs->typeArguments()->append(genericTypeWithNoBounds1a);
+		auto genericTypeWithNoBounds2a = new FormalTypeArgument("G",nullptr,nullptr);
+		genericClassWith3TypeArgs->typeArguments()->append(genericTypeWithNoBounds2a);
+		auto genericTypeWithNoBounds3a = new FormalTypeArgument("H",nullptr,nullptr);
+		genericClassWith3TypeArgs->typeArguments()->append(genericTypeWithNoBounds3a);
+
+	Class* classWithFields = new Class("ClassWithFields",Visibility::PUBLIC);
+			prj -> classes()->append(classWithFields);
+
+		Field* fieldWithClassType = new Field("fieldWithClassType",
+			new ClassTypeExpression(new ReferenceExpression("BaseClass")));
+			classWithFields->fields()->append(fieldWithClassType);
+
+		Field* fieldWithIntType = new Field("fieldWithIntType",
+			new PrimitiveTypeExpression(PrimitiveType::INT), Visibility::PUBLIC);
+			classWithFields->fields()->append(fieldWithIntType);
+
+		Field* fieldPublicBoolean = new Field("fieldPublicBoolean",
+			new PrimitiveTypeExpression(PrimitiveType::BOOLEAN), Visibility::PUBLIC);
+			classWithFields->fields()->append(fieldPublicBoolean);
+
+		Field* fieldprivateFloat = new Field("fieldprivateFloat",
+			new PrimitiveTypeExpression(PrimitiveType::FLOAT), Visibility::PRIVATE);
+			classWithFields->fields()->append(fieldprivateFloat);
+
+		Field* fieldprotectedLong = new Field("fieldprotectedLong",
+			new PrimitiveTypeExpression(PrimitiveType::LONG), Visibility::PROTECTED);
+			classWithFields->fields()->append(fieldprotectedLong);
+
+		Field* fieldDouble = new Field("fieldDouble",
+			new PrimitiveTypeExpression(PrimitiveType::DOUBLE), Visibility::DEFAULT);
+			classWithFields->fields()->append(fieldDouble);
+
+		Field* fieldChar = new Field("fieldChar",
+			new PrimitiveTypeExpression(PrimitiveType::CHAR), Visibility::DEFAULT);
+			classWithFields->fields()->append(fieldChar);
+
+			auto arrayTypeExpr = new ArrayTypeExpression();
+			arrayTypeExpr->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::INT));
+		Field* fieldIntArray = new Field("fieldIntArray",
+			arrayTypeExpr, Visibility::PRIVATE);
+			classWithFields->fields()->append(fieldIntArray);
+
+			auto arrayTypeExpr1Dim = new ArrayTypeExpression();
+			arrayTypeExpr1Dim->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::FLOAT));
+			auto arrayTypeExpr2Dim = new ArrayTypeExpression();
+			arrayTypeExpr2Dim->setTypeExpression(arrayTypeExpr1Dim);
+		Field* field2dimArray = new Field("field2dimArray",
+			arrayTypeExpr, Visibility::PRIVATE);
+			classWithFields->fields()->append(field2dimArray);
+
+
+
+	//TODO: test all the types
+	// -> what about types that do not exist in java?
+	//TODO: field with generic type
+	//TODO: multidimensional array
+	//TODO: initialized fields
+
+
+	model->endModification();
+
+	SourceBuilder* sb = new SourceBuilder("source",0);
+	sb->createSourceFromClass(testClass);
+	sb->createSourceFromClass(baseClass);
+	sb->createSourceFromClass(classWithFields);
+	sb->createSourceFromClass(genericClassWithNoBounds);
+	sb->createSourceFromClass(genericClassWith2TypeArgs);
+	sb->createSourceFromClass(genericClassWith3TypeArgs);
+
+
+	delete sb;
+
 	CHECK_INT_EQUAL(1,1);
 }
 
