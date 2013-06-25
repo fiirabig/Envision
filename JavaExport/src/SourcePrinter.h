@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2012 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,40 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
 
-#include <iostream>
-#include <fstream>
-#include "OOModel/src/allOOModelNodes.h"
-#include <vector>
+#pragma once
+#include"SourceToASTMap.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace JavaExport {
 
-class SourceBuilder {
-
+class SourcePrinter {
 	public:
-		SourceBuilder(QString outputDirectory);
-		virtual ~SourceBuilder();
-		bool removeDir(const QString & dirName);
-		void createSourceFromModel(Model::Model*, QString outputDir);
-		void createSourceFromClass(OOModel::Class*);
-		//void printIndent();
-		void printClassHeader(OOModel::Class*) ;
-		void printExpression(OOModel::Expression*);
-		void printFieldDeclaration(OOModel::Field*);
-		void printType(const OOModel::Type*);
-		void printFormalTypeArguments(Model::TypedList<OOModel::FormalTypeArgument>*);
-		void printPrimitiveType(OOModel::PrimitiveType::PrimitiveTypes);
-		void printBinaryOperator(OOModel::BinaryOperation::OperatorTypes);
+		enum IndentChangeInfo {
+			NoChange,
+			IncrementIndent,
+			DecrementIndent
+		};
+		SourcePrinter(QString filename, SourceToASTMap& map, int indentWidth = 4);
+		virtual ~SourcePrinter();
+		void print(QString text);
+		void printNewLineAndIndent(IndentChangeInfo info = NoChange);
+		//TODO: remove
+		void flush();
 
+		void startPrinting(Model::Node* node);
+		void endPrinting(Model::Node* node);
 	private:
+		QString filename_;
+		QFile file_;
+		QTextStream print_;
+		SourceToASTMap& map_;
+		QPair<int,int> cursor_;
+		int indentWidth_;
 		int indent_;
-		QTextStream dest_;
-		QVector<Model::Node*> lines_;
+		void printIndent();
+		void incrIndent();
+		void decrIndent();
 };
-}
 
+} /* namespace JavaExport */
