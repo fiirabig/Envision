@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2012 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,36 @@
  **
  **********************************************************************************************************************/
 
+
 #pragma once
-
-#include <iostream>
-#include <fstream>
-#include "OOModel/src/allOOModelNodes.h"
-#include <vector>
-
+#include "SourcePrinter.h"
+#include "ModifierPrinter.h"
+#include "ExpressionPrinter.h"
+#include "StatementPrinter.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Method.h"
 namespace JavaExport {
 
-class SourceBuilder {
-
+class ClassPrinter {
 	public:
-		SourceBuilder(QString outputDirectory);
-		virtual ~SourceBuilder();
-		bool removeDir(const QString & dirName);
-		void createSourceFromModel(Model::Model*, QString outputDir);
-		void createSourceFromClass(OOModel::Class*);
-		//void printIndent();
-		void printClassHeader(OOModel::Class*) ;
-		void printExpression(OOModel::Expression*);
-		void printFieldDeclaration(OOModel::Field*);
-		void printType(const OOModel::Type*);
-		void printFormalTypeArguments(Model::TypedList<OOModel::FormalTypeArgument>*);
-		void printPrimitiveType(OOModel::PrimitiveType::PrimitiveTypes);
-		void printBinaryOperator(OOModel::BinaryOperation::OperatorTypes);
+		ClassPrinter(SourcePrinter&, ModifierPrinter*, ExpressionPrinter*, StatementPrinter*);
+		virtual ~ClassPrinter();
 
+		void print(OOModel::Class* c);
 	private:
-		int indent_;
-		QTextStream dest_;
-		QVector<Model::Node*> lines_;
+		SourcePrinter& printer_;
+		ModifierPrinter* modifierPrinter_;
+		ExpressionPrinter* expressionPrinter_;
+		StatementPrinter* statementPrinter_;
+		void printClass(OOModel::Class* c);
+		void printClassHeader(OOModel::Class* c);
+		void printTypeArguments(Model::TypedList<OOModel::FormalTypeArgument>* args);
+		void printBaseClasses(OOModel::Class* c);
+		void printClassBody(OOModel::Class* c);
+		void printFields(OOModel::Class* c);
+		void printMethods(OOModel::Class* c);
+		void printMethodHeader(OOModel::Method* method);
+		void printMethodBody(OOModel::Method* method);
 };
-}
 
+} /* namespace JavaExport */
