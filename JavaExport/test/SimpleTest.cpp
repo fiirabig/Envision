@@ -25,20 +25,48 @@
  **********************************************************************************************************************/
 
 #include "javaexport.h"
+#include "SourceToASTMap.h"
+#include "SourcePrinter.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "OOModel/src/allOOModelNodes.h"
 #include "SourceBuilder.h"
+#include "FilePersistence/src/FileStore.h"
 using namespace OOModel;
 
 namespace JavaExport {
 
 TEST(JavaExport, SimpleTest)
 {
-	Model::Model* model = new Model::Model();
+	/*Model::Model* model = new Model::Model();
 	auto prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes");
+	*/
 
-	Class* baseClass = new Class("BaseClass",Visibility::PUBLIC);
+	qDebug() << "***************************************************";
+	// test writing file
+	QDir dir;
+	dir.mkdir("bla");
+	QFile file("bla/bla2.txt");
+	QTextStream out(&file);
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	out << "hallo";
+
+	// test loading project
+	QString testDir = "projects/";
+	Model::Model* model = new Model::Model();
+	FilePersistence::FileStore store;
+	store.setBaseFolder(testDir);
+
+	model->load(&store, "large");
+	auto prj = dynamic_cast<OOModel::Project*> (model->root());
+	qDebug() << "building source for project: " << prj->name() << endl;
+
+	SourceBuilder* builder = new SourceBuilder("output");
+	qDebug() << "builder ok " << builder << endl;
+
+	builder->createSourceFromModel(model, "output");
+
+	/*Class* baseClass = new Class("BaseClass",Visibility::PUBLIC);
 		prj->classes()->append(baseClass);
 
 	Class* testClass = new Class("TestClass",Visibility::PUBLIC);
@@ -132,8 +160,11 @@ TEST(JavaExport, SimpleTest)
 
 
 	delete sb;
-
+*/
+	qDebug() << "************************************************";
 	CHECK_INT_EQUAL(1,1);
+	//TODO: remove
+	Q_ASSERT(false && "test finished");
 }
 
 }

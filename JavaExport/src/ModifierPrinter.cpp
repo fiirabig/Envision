@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2012 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,62 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
 
-#include <iostream>
-#include <fstream>
-#include "OOModel/src/allOOModelNodes.h"
-#include <vector>
+#include "ModifierPrinter.h"
 
 namespace JavaExport {
 
-class SourceBuilder {
+ModifierPrinter::ModifierPrinter(SourcePrinter& printer):
+		printer_(printer)
+{
+	// TODO Auto-generated constructor stub
 
-	public:
-		SourceBuilder(QString outputDirectory);
-		virtual ~SourceBuilder();
-		bool removeDir(const QString & dirName);
-		void createSourceFromModel(Model::Model*, QString outputDir);
-		void createSourceFromClass(OOModel::Class*);
-		//void printIndent();
-		void printClassHeader(OOModel::Class*) ;
-		void printExpression(OOModel::Expression*);
-		void printFieldDeclaration(OOModel::Field*);
-		void printType(const OOModel::Type*);
-		void printFormalTypeArguments(Model::TypedList<OOModel::FormalTypeArgument>*);
-		void printPrimitiveType(OOModel::PrimitiveType::PrimitiveTypes);
-		void printBinaryOperator(OOModel::BinaryOperation::OperatorTypes);
-
-	private:
-		int indent_;
-		QTextStream dest_;
-		QVector<Model::Node*> lines_;
-};
 }
 
+ModifierPrinter::~ModifierPrinter()
+{
+	// TODO Auto-generated destructor stub
+}
+
+void ModifierPrinter::print(OOModel::Modifier* modifier)
+{
+	printer_.startPrinting(modifier);
+	printModifier(modifier);
+	printer_.endPrinting(modifier);
+
+}
+
+void ModifierPrinter::printModifier(OOModel::Modifier* modifier)
+{
+//	enum ModifierFlag {
+//				None  = 0x00000000,
+//
+//				Public = 0x00000001,
+//				Private = 0x00000002,
+//				Protected = 0x00000004,
+//
+//				Static = 0x00000008
+//			};
+
+	qDebug() << "printing modifier " << modifier;
+	//XXX: remove hit;
+	int hit = 0;
+	if(modifier->isSet(OOModel::Modifier::None)) {
+			printer_.print("");
+			hit++;
+	}if(modifier->isSet(OOModel::Modifier::Public)) {
+		printer_.print("public ");
+		hit++;
+	}if(modifier->isSet(OOModel::Modifier::Private)) {
+		printer_.print("private ");
+		hit++;
+	}if(modifier->isSet(OOModel::Modifier::Protected)) {
+		printer_.print("protected ");
+		hit++;
+	}if(modifier->isSet(OOModel::Modifier::Static)) {
+		printer_.print("static ");
+		hit++;
+	}
+	Q_ASSERT(hit>0);
+}
+} /* namespace JavaExport */

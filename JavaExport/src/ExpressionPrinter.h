@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2012 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+/*
+ * ExpressionPrinter.h
+ *
+ *  Created on: Jun 23, 2013
+ *      Author: marti
+ */
 
-#include <iostream>
-#include <fstream>
-#include "OOModel/src/allOOModelNodes.h"
-#include <vector>
+#pragma once
+#include "SourcePrinter.h"
+#include "ModifierPrinter.h"
+#include "OOModel/src/declarations/VariableDeclaration.h"
+#include "OOModel/src/expressions/Expression.h"
 
 namespace JavaExport {
 
-class SourceBuilder {
-
+class ExpressionPrinter {
 	public:
-		SourceBuilder(QString outputDirectory);
-		virtual ~SourceBuilder();
-		bool removeDir(const QString & dirName);
-		void createSourceFromModel(Model::Model*, QString outputDir);
-		void createSourceFromClass(OOModel::Class*);
-		//void printIndent();
-		void printClassHeader(OOModel::Class*) ;
-		void printExpression(OOModel::Expression*);
-		void printFieldDeclaration(OOModel::Field*);
-		void printType(const OOModel::Type*);
-		void printFormalTypeArguments(Model::TypedList<OOModel::FormalTypeArgument>*);
-		void printPrimitiveType(OOModel::PrimitiveType::PrimitiveTypes);
-		void printBinaryOperator(OOModel::BinaryOperation::OperatorTypes);
-
+		ExpressionPrinter(SourcePrinter& printer);
+		virtual ~ExpressionPrinter();
+		void print(OOModel::Expression* expr);
+		void printVariableDeclaration(OOModel::VariableDeclaration* decl);
 	private:
-		int indent_;
-		QTextStream dest_;
-		QVector<Model::Node*> lines_;
-};
-}
+		SourcePrinter& printer_;
+		ModifierPrinter* modifierPrinter_;
+		void printExpression(OOModel::Expression* expr);
 
+};
+
+} /* namespace JavaExport */
