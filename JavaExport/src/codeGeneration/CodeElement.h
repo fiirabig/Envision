@@ -249,6 +249,7 @@ public:
 
 
 
+
 //inline QList<CodeElement*> Code::children() { return children_; }
 
 } /* namespace JavaExport */

@@ -1,0 +1,15 @@
+# SET A DIRECTORY CONTAINING A test.cpp file
+# The test will pick the first line without leading '#'
+#General
+#Loops
+#DeclStmt
+#SwitchCase
+#GlobalFunctions
+#TemplateClassSpec
+#TemplateMethodSpec
+#TypeTraits
+
+#The paths below are relative to the DebugBuild/test directory
+#spath:/Envision
+#path:/Envision/VisualizationBase
+path:/Envision/Core

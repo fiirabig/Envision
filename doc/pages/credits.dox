@@ -18,7 +18,12 @@ Andrea Helfenstein - https://github.com/helandre
 		- Declarative API for defining visualizations and supporting documentation
 
 <br>
+Jonas Trappenberg - https://github.com/teeberg
+		- Comments and Diagrams infrastructure
+
+<br>
 Lukas Vogel - https://github.com/lukedirtwalker
+		- C++ import plug-in
 		- Enhancements to the object-oriented model
 
 \section special Special Thanks
@@ -38,4 +43,7 @@ Lukas Vogel - https://github.com/lukedirtwalker
 		- http://openclipart.org/detail/34693/architetto----tasto-2-by-anonymous
 		- http://openclipart.org/detail/34711/architetto----tasto-5-by-anonymous
 		- http://openclipart.org/detail/10940/red-+-green-ok-not-ok-icons-by-tzeeniewheenie-10940
+		- http://openclipart.org/detail/121483/a-simple-globe-by-jhnri4
+		- http://openclipart.org/detail/17620/blank-sticky-note-by-lemmling
+		- http://openclipart.org/detail/122155/pencil-by-dear_theophilus
 */ 
