@@ -11,4 +11,4 @@
 /*/*.dll
 /*/Makefile
 /*/Makefile.Release
-/*/Makefile.Debug
+/*/Makefile.Debug/DebugBuild
