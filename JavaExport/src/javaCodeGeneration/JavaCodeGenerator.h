@@ -24,37 +24,48 @@
  **
  **********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
+#pragma once
 
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "codeGeneration/CodeGenerator.h"
+#include "codeGeneration/LayoutConfig.h"
 
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
+#include "declarationGenerators/DeclarationGenerator.h"
+#include "statementGenerators/StatementGenerator.h"
+#include "expressionGenerators/ExpressionGenerator.h"
+#include "elementGenerators/ElementGenerator.h"
 
-namespace JavaExport {
 
-TEST(JavaExport, SimpleTest)
+namespace Model
 {
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
-
-	model->load(&store, "marti");
-
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
+	class Node;
 }
+namespace JavaExport
+{
 
-}
+class JavaCodeGenerator : public CodeGenerator
+{
+public:
+	JavaCodeGenerator();
+	virtual ~JavaCodeGenerator();
+	virtual CodeElement* generate(Model::Node*  element) const override;
+	virtual LayoutConfig& layoutConfig() override;
+	Scope* curlyBraces(Model::Node* node) const;
+	Scope* parenthesis(Model::Node* node) const;
+
+private: //TODO: moved to JavaCodeElementGenerator
+	LayoutConfig config_{"    "};
+	LayoutConfig::ScopeLayout curlyBracesLayout_{" {", "}",true,false,true,true,true};
+	LayoutConfig::ScopeLayout parenthesisLayout_{"(", ")", false,false,false,false,false};
+
+	const DeclarationGenerator declarationGenerator_;
+	const StatementGenerator statementGenerator_;
+	const ExpressionGenerator expressionGenerator_;
+	const ElementGenerator elementGenerator_;
+
+};
+
+inline LayoutConfig& JavaCodeGenerator::layoutConfig() {return config_;}
+
+
+} /* namespace JavaExport */
+

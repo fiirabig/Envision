@@ -24,37 +24,76 @@
  **
  **********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
-
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
+#include "FileController.h"
+#include "CodeElement.h"
 
 namespace JavaExport {
 
-TEST(JavaExport, SimpleTest)
+
+FileController::FileController(LayoutConfig config,SourceFile* file):
+		//qFile_("source_code/bla")
+		qFile_(file->parentDirectory()->qDir().absolutePath() + "/" + file->name() + "." + file->fileExtension()),
+		config_(config)
 {
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
-
-	model->load(&store, "marti");
-
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
+	qDebug() << file;
+	if(!qFile_.open(QIODevice::WriteOnly | QIODevice::Text))
+		Q_ASSERT(false && "can't open file");
+	stream_.setDevice(&qFile_);
+	stream_.setCodec("UTF-8");
 }
 
+FileController::~FileController()
+{
+	Q_ASSERT(openScopes_.isEmpty());
+	qFile_.close();
+
 }
+
+void FileController::print(const QString& text)
+{
+	qDebug() << "printing to file" << text << flush;
+	stream_ << text;
+	cursor_.advanceSymbol(text.size());
+	//TODO: map
+	qDebug() << "finished printing to file" << flush;
+}
+
+void FileController::openScope(const LayoutConfig::ScopeLayout& scope)
+{
+	//openScopes_.append(scope);
+	if(scope.newLineBeforOpen) printNewLine();
+	//qDebug() << scope.openString;
+	print(scope.openString);
+	if(scope.indented) indent_++;
+	if(scope.newLineAfterOpen) printNewLine();
+}
+
+void FileController::closeScope(const LayoutConfig::ScopeLayout& scope)
+{
+	//Q_ASSERT(!openScopes_.isEmpty());
+	//LayoutConfig::ScopeLayout scope = openScopes_.takeLast();
+	if(scope.indented) indent_--;
+	if(scope.newLineBeforeClose) printNewLine();
+	print(scope.closeString);
+	if(scope.newLineAfterClose) printNewLine();
+}
+
+
+void FileController::printIndent()
+{
+	Q_ASSERT(indent_ >= 0);
+
+	for(int i = 0; i < indent_; i++) {
+		print(config_.indentString());
+	}
+}
+
+void FileController::printNewLine()
+{
+	stream_ << endl;
+	cursor_.advanceLine();
+	printIndent();
+}
+
+
+} /* namespace JavaExport */

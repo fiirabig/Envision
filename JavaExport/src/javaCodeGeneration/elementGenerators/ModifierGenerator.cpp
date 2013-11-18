@@ -6,8 +6,8 @@
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  ** following conditions are met:
  **
- **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the
- **      following disclaimer.
+ **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ **      disclaimer.
  **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  **      following disclaimer in the documentation and/or other materials provided with the distribution.
  **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
@@ -22,39 +22,51 @@
  ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
- **********************************************************************************************************************/
+ ***********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
-
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
+#include "ModifierGenerator.h"
+#include "OOModel/src/elements/Modifier.h"
 
 namespace JavaExport {
 
-TEST(JavaExport, SimpleTest)
+ModifierGenerator::ModifierGenerator() {
+	// TODO Auto-generated constructor stub
+}
+
+ModifierGenerator::~ModifierGenerator() {
+	// TODO Auto-generated destructor stub
+}
+
+CodeElement* JavaExport::ModifierGenerator::generate(OOModel::Modifier* modifier) const
 {
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
+	auto code = new Code(modifier);
 
-	model->load(&store, "marti");
+	bool first = true;
+	if(modifier->isSet(OOModel::Modifier::Public))
+	{
+		if(first) first = false; else *code << " ";
+		*code << ("public");
+	}
+	first = true;
+	if(modifier->isSet(OOModel::Modifier::Private))
+	{
+		if(first) first = false; else *code << " ";
+		*code << ("private");
+	}
+	first = true;
+	if(modifier->isSet(OOModel::Modifier::Protected))
+	{
+		if(first) first = false; else *code << " ";
+		*code << ("protected");
+	}
+	first = true;
+	if(modifier->isSet(OOModel::Modifier::Static))
+	{
+		if(first) first = false; else *code << " ";
+		*code << ("static");
+	}
 
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
+	return code;
 }
 
-}
+}/* namespace JavaExport */

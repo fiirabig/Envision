@@ -24,37 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
+#pragma once
+#include "LayoutConfig.h"
+#include <QDir>
 
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
 
 namespace JavaExport {
+class SourceFile;
 
-TEST(JavaExport, SimpleTest)
-{
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
+class FileController {
+	public:
+	struct Cursor {
+		int line {};
+		int symbol {};
+		void advanceLine(){ line++; symbol = 0; }
+		void advanceSymbol(int amount) { symbol += amount; }
+	};
 
-	model->load(&store, "marti");
+		FileController(LayoutConfig config,SourceFile* file);
+		virtual ~FileController();
+		void print(const QString&);
+		void printNewLine();
+		void openScope(const LayoutConfig::ScopeLayout&);
+		void closeScope(const LayoutConfig::ScopeLayout&);
+		Cursor cursor() const;
 
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
-}
+	private:
+		void printIndent();
+		QFile qFile_;
+		QTextStream stream_{};
+		int indent_{};
+		Cursor cursor_;
+		QList<LayoutConfig::ScopeLayout> openScopes_;
+		LayoutConfig config_;
+};
 
-}
+inline FileController::Cursor FileController::cursor() const {return cursor_; }
+
+} /* namespace JavaExport */

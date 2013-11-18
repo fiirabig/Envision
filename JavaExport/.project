@@ -3,14 +3,11 @@
 	<name>JavaExport</name>
 	<comment></comment>
 	<projects>
-		<project>Core</project>
 		<project>InteractionBase</project>
-		<project>Logger</project>
 		<project>ModelBase</project>
 		<project>OOInteraction</project>
 		<project>OOModel</project>
 		<project>OOVisualization</project>
-		<project>SelfTest</project>
 		<project>VisualizationBase</project>
 	</projects>
 	<buildSpec>
