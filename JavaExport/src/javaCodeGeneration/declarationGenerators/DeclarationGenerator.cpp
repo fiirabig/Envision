@@ -6,8 +6,8 @@
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  ** following conditions are met:
  **
- **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the
- **      following disclaimer.
+ **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ **      disclaimer.
  **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  **      following disclaimer in the documentation and/or other materials provided with the distribution.
  **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
@@ -22,39 +22,45 @@
  ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
- **********************************************************************************************************************/
+ ***********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
+#include "DeclarationGenerator.h"
+#include "OOModel/src/declarations/Declaration.h"
+#include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/VariableDeclaration.h"
 
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
-
-namespace JavaExport {
-
-TEST(JavaExport, SimpleTest)
+namespace JavaExport
 {
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
 
-	model->load(&store, "marti");
-
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
+DeclarationGenerator::DeclarationGenerator()
+{
+	// TODO Auto-generated constructor stub
 }
 
+DeclarationGenerator::~DeclarationGenerator()
+{
+	// TODO Auto-generated destructor stub
 }
+
+CodeElement* DeclarationGenerator::generate(OOModel::Declaration* declaration) const
+{
+	if(auto project = dynamic_cast<OOModel::Project*>(declaration))
+		return projectGenerator_.generate(project);
+	else if(auto module = dynamic_cast<OOModel::Module*>(declaration))
+		return moduleGenerator_.generate(module);
+	else if(auto c = dynamic_cast<OOModel::Class*>(declaration))
+		return classGenerator_.generate(c);
+	else if(auto decl = dynamic_cast<OOModel::VariableDeclaration*>(declaration))
+		return variableDeclarationGenerator_.generate(decl);
+	else
+	{
+		qDebug() << "unimplemented " << declaration->symbolName();
+		Q_ASSERT(false && "unimplemented");
+		return nullptr;
+	}
+
+}
+
+} /* namespace JavaExport */

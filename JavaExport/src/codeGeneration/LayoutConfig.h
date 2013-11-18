@@ -24,37 +24,38 @@
  **
  **********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
-
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
+#pragma once
 
 namespace JavaExport {
 
-TEST(JavaExport, SimpleTest)
-{
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
+class LayoutConfig {
+	public:
+		LayoutConfig(QString);
+		virtual ~LayoutConfig();
+		const QString& indentString() const;
 
-	model->load(&store, "marti");
+		struct ScopeLayout {
+				ScopeLayout(QString open, QString close, bool indented,
+						bool newLineBeforOpen, bool newLineAfterOpen,
+						bool newLineBeforeClose, bool newLineAfterClose):
+					openString(open),closeString(close),indented(indented),
+					newLineBeforOpen(newLineBeforOpen),newLineAfterOpen(newLineAfterOpen),
+					newLineBeforeClose(newLineBeforeClose),newLineAfterClose(newLineAfterClose)
+				{}
+				const QString openString;
+				const QString closeString;
+				const bool indented;
+				const bool newLineBeforOpen;
+				const bool newLineAfterOpen;
+				const bool newLineBeforeClose;
+				const bool newLineAfterClose;
+		};
 
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
-}
 
-}
+	private:
+		const QString indentString_;
+};
+
+inline const QString& LayoutConfig::indentString() const { return indentString_; }
+
+} /* namespace JavaExport */
