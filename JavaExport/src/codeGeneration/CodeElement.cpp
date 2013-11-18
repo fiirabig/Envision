@@ -24,37 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
-#include "FilePersistence/src/FileStore.h"
-
-#include "FilePersistence/src/filepersistence.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "javaCodeGeneration/JavaCodeGenerator.h"
-#include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
-using namespace OOModel;
+#include "CodeElement.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace JavaExport {
 
-TEST(JavaExport, SimpleTest)
+CodeElement::CodeElement(Model::Node* owner) : owner_(owner)
 {
-	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
-	store.setBaseFolder(testDir);
-
-	model->load(&store, "marti");
-
-	JavaCodeGenerator generator;
-	generator.printSourceFiles(model->root(), "source_code");
-	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
-}
+	// TODO Auto-generated constructor stub
 
 }
+
+CodeElement::~CodeElement()
+{
+	// TODO Auto-generated destructor stub
+}
+
+} /* namespace JavaExport */

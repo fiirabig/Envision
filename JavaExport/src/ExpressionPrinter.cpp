@@ -350,7 +350,7 @@ void ExpressionPrinter::printExpression(OOModel::Expression* expr)
 
 	}else if(auto methodCallExpression = dynamic_cast<MethodCallExpression*>(expr)) {
 		if(verbose) qDebug() << "expression is MethodCallExpression";
-			print(methodCallExpression->ref());
+			//print(methodCallExpression->ref());
 			printer_.print("(");
 			printer_.flush();
 		bool first = true;
