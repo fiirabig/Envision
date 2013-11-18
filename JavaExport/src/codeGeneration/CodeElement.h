@@ -59,6 +59,7 @@ class CodeElement {
 						+ " , symbolName: " + comp->symbolName() + ")";
 			else return "Node(symbolName: " + owner()->symbolName() + ")";
 			return "";
+
 		}
 	protected:
 		Model::Node* const owner_;
@@ -245,6 +246,8 @@ class NotAllowed : public Error
 public:
 	NotAllowed(Model::Node* owner,QString language) : Error(owner,language){};
 };
+
+
 
 //inline QList<CodeElement*> Code::children() { return children_; }
 
