@@ -24,33 +24,22 @@
  **
  ***********************************************************************************************************************/
 
-#include "ElementGenerator.h"
+#include "ScopeLayout.h"
 
-#include "ModelBase/src/nodes/Node.h"
-#include "OOModel/src/elements/Modifier.h"
+namespace JavaExport {
 
-namespace JavaExport
-{
-
-ElementGenerator::ElementGenerator()
+ScopeLayout::ScopeLayout(QString open, QString close, bool indented,	bool newLineBeforOpen,
+	bool newLineAfterOpen,bool newLineBeforeClose, bool newLineAfterClose):
+		openString(open),closeString(close),indented(indented),
+		newLineBeforOpen(newLineBeforOpen),newLineAfterOpen(newLineAfterOpen),
+		newLineBeforeClose(newLineBeforeClose),newLineAfterClose(newLineAfterClose)
 {
 	// TODO Auto-generated constructor stub
+
 }
 
-ElementGenerator::~ElementGenerator()
-{
+ScopeLayout::~ScopeLayout() {
 	// TODO Auto-generated destructor stub
-}
-
-CodeElement* ElementGenerator::generate(Model::Node* node) const
-{
-	if(auto modifier = dynamic_cast<OOModel::Modifier*>(node))
-		return modifierGenerator_.generate(modifier);
-
-	qDebug() << "unimplemented " << node->symbolName();
-	Q_ASSERT(false && "unimplemented");
-	return nullptr;
-
 }
 
 } /* namespace JavaExport */

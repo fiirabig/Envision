@@ -9,7 +9,7 @@
 
 namespace JavaExport {
 
-ClassGenerator::ClassGenerator()
+ClassGenerator::ClassGenerator(Config config): CodeElementGenerator(config)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -21,34 +21,56 @@ ClassGenerator::~ClassGenerator()
 
 CodeElement* ClassGenerator::generate(OOModel::Class* c) const
 {
-	auto code = new Code(c);
+	/*
+		 from Declaration
+		ATTRIBUTE_OOP_ANNOTATIONS //TODO: ask mitko
+		ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations) //TODO: ask mitko
 
-	auto classHeader = new Code(c);
-	*code << classHeader;
-	*classHeader << c->modifiers() << " class " << c->name();
-	//TODO: base classes & type arguments
+		ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)//TODO: ask mitko about interfaces
+		PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int) //TODO: ask mikto
+	*/
 
-	auto body = curlyBraces(c);
-	*code << body;
+		auto code = new Code(c);
 
-	auto classes = new Code(c);
-	*body << classes;
-	for(auto innerClass: *c->classes())
-		*body << innerClass;
+		auto classHeader = new Code(c);
+		*code << classHeader;
+		*classHeader << c->modifiers() << " class " << c->name();
 
-	auto fields = new Code(c);
-	*body << fields;
-	for(auto field: *c->fields())
-		*fields << field;
+		*classHeader << new Sequence(c->typeArguments(),"<"," ,",">");
 
-	auto methods = new Code(c);
-	*body << methods;
-	for(auto method : *c->methods())
-		*methods << method;
+		bool first = true;
+		bool second = true;
+		*classHeader << new Ignore(c->baseClasses());
+		for(auto base :*c->baseClasses())
+		{
+			if(first)
+			{
+				*code << " extends " << base;
+				first = false;
+			}
+			else if(second)
+			{
+				*code << " implements " << base;
+				second = false;
+			}
+			else
+				*code << " ," << base;
+		}
 
-	//TODO: enum... check for completeness...
+		auto body = curlyBraces(c);
+		*code << body;
+		*body << c->classes()  << c->enumerators() << c->fields() << c->methods();
 
-	return code;
+		//TODO: enum... testcases check for completeness...
+
+		//TODO: check with mitko
+		//Illegal in Java
+		if(c->friends()->size())
+			*code << new NotAllowed(c->friends(),"in Java there is no concept of friends");
+		else
+			*code << new Ignore(c->friends());
+
+		return code;
 }
 
 } /* namespace JavaExport */

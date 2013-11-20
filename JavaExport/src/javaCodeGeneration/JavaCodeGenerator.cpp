@@ -6,16 +6,17 @@
  */
 
 #include "JavaCodeGenerator.h"
+#include "JavaConfig.h"
 #include "codeGeneration/CodeElement.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "OOModel/src/declarations/Declaration.h"
-#include "OOModel/src/statements/Statement.h"
+#include "OOModel/src/elements/StatementItem.h"
 #include "OOModel/src/expressions/Expression.h"
 
 namespace JavaExport
 {
 
-JavaCodeGenerator::JavaCodeGenerator()
+JavaCodeGenerator::JavaCodeGenerator() : CodeGenerator(javaConfig())
 {
 	// TODO Auto-generated constructor stub
 }
@@ -25,26 +26,17 @@ JavaCodeGenerator::~JavaCodeGenerator()
 	// TODO Auto-generated destructor stub
 }
 
-//Todo: moved to JavaCodeElementGenerator
-Scope* JavaCodeGenerator::curlyBraces(Model::Node* node) const
-{
-	return new Scope(node,curlyBracesLayout_);
-}
-
-Scope* JavaCodeGenerator::parenthesis(Model::Node* node) const
-{
-	return new Scope(node,parenthesisLayout_);
-}
-
 CodeElement* JavaCodeGenerator::generate(Model::Node* node) const
 {
+	if(!node) return nullptr;
+	//TODO: ask mitko
 	if(auto declaration = dynamic_cast<OOModel::Declaration*>(node))
-		return declarationGenerator_.generate(declaration);
-	else if(auto statement = dynamic_cast<OOModel::Statement*>(node))
-		return statementGenerator_.generate(statement);
+		return declarationGenerator_.AbstractDeclarationGenerator::generate(declaration);
+	else if(auto statement = dynamic_cast<OOModel::StatementItem*>(node))
+		return statementGenerator_.StatementItemGenerator::generate(statement);
 	else if(auto expression = dynamic_cast<OOModel::Expression*>(node))
 		return expressionGenerator_.generate(expression);
-	else return elementGenerator_.generate(node);
+	else return elementGenerator_.ElementGenerator::generate(node);
 
 //	qDebug() << "unimplemented " << node->symbolName();
 //	Q_ASSERT(false &&  "unimplemented");

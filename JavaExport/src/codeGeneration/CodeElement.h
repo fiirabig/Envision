@@ -29,6 +29,7 @@
 #include "FileController.h"
 #include <QDir>
 #include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/List.h"
 
 namespace JavaExport {
 class SourceDirectory;
@@ -45,9 +46,17 @@ class CodeElement {
 		SourceFile* sourceFile();
 		void setSourceFile(SourceFile* file);
 		virtual void initializeParentDirectory(CodeElement* child);
-		virtual const QString toString(){
-			Q_ASSERT(owner_ && "owner must be non-null");
-			return "CodeElement(" + owner_->symbolName() + ")";
+		virtual const QString toString()
+		{
+			return "CodeElement(" + ownerToString() + ")";
+		}
+		QString ownerToString() const
+		{
+			if(!owner())
+				return "nullptr";
+			else
+				return "Node(typeName: " + owner_->typeName() + " symbolName: " + owner()->symbolName() + ")";
+
 		}
 	protected:
 		Model::Node* const owner_;
@@ -166,43 +175,131 @@ class SourceFile : public CodeElementContainer{
 
 class Scope : public CodeElementContainer {
 	public:
-		Scope(Model::Node* owner, LayoutConfig::ScopeLayout scopeLayout):
+		Scope(Model::Node* owner, ScopeLayout scopeLayout):
 			CodeElementContainer(owner), scopeLayout_(scopeLayout){};
 		virtual ~Scope(){};
-		const LayoutConfig::ScopeLayout& scopeLayout() const;
+		const ScopeLayout& scopeLayout() const;
 		virtual const QString toString() override {return "Scope(" + CodeElementContainer::toString() + ")";}
 
 	private:
-		const LayoutConfig::ScopeLayout scopeLayout_;
+		const ScopeLayout scopeLayout_;
 };
 
-inline const LayoutConfig::ScopeLayout& Scope::scopeLayout() const { return scopeLayout_;}
+inline const ScopeLayout& Scope::scopeLayout() const { return scopeLayout_; }
 
 
 
 class Code : public CodeElementContainer {
 	public:
 		Code(Model::Node* owner) : CodeElementContainer(owner){}
-		virtual const QString toString() override {
+		virtual const QString toString() override
+		{
 			return "Code(" + CodeElementContainer::toString() + ")";
 		}
 
 };
 
-class NewLine : public CodeElement {
-	public :
-		NewLine(Model::Node* owner) : CodeElement(owner){};
+
+class Sequence : public CodeElementContainer
+{
+public:
+	Sequence(Model::List* owner, QString first, QString separator, QString last)
+		:CodeElementContainer(owner)
+	{
+		init(first,separator,last);
+	}
+	Sequence(Model::List* owner, QString first, QString last)
+		:CodeElementContainer(owner)
+	{
+		init(first,"",last);
+	}
+	Sequence(Model::List* owner, QString separator )
+		:CodeElementContainer(owner)
+	{
+		init("",separator,"");
+	}
+	Sequence(Model::List* owner)
+		:CodeElementContainer(owner)
+	{
+		init("","","");
+	}
+
+	virtual const QString toString() override
+	{
+		return "List(" + CodeElementContainer::toString() + ")";
+	}
+
+private:
+	void init(QString first, QString separator, QString last)
+	{
+		bool firstElem = true;
+		auto list = dynamic_cast<Model::List*>(owner());
+		for(auto node : *list)
+		{
+			if(firstElem)
+			{
+				firstElem = false;
+				*this << first;
+			}
+			else *this << separator;
+			*this << node;
+		}
+		if(!firstElem) *this << last;
+	}
 };
 
-class Package : public CodeElement {
-	public:
-		Package(Model::Node* owner) : CodeElement(owner){};
+class NewLine : public CodeElement
+{
+public :
+	NewLine(Model::Node* owner) : CodeElement(owner){};
 };
 
-class Ignore : public CodeElement {
-	public:
-		Ignore(Model::Node* owner) : CodeElement(owner){};
+class Package : public CodeElement
+{
+public:
+	Package(Model::Node* owner) : CodeElement(owner){};
 };
+
+class Ignore : public CodeElement
+{
+public:
+	Ignore(Model::Node* owner) : CodeElement(owner){};
+};
+
+class Error : public CodeElement
+{
+public:
+	Error(Model::Node* owner,QString message) : CodeElement(owner), message_(message){};
+	virtual QString message() const {return message_;}
+	virtual const QString toString() override {return "Error(" + ownerToString() + ", " + message_ +  ")";}
+
+private:
+	QString message_;
+};
+
+class Unimplemented : public Error
+{
+public:
+	Unimplemented(Model::Node* owner,QString language) : Error(owner,language){};
+	virtual const QString toString() override {return "Unimplemented(" + ownerToString() + ", " + message() +  ")";}
+	virtual QString message() const override
+	{
+		return "There is no implementation for " + ownerToString() + " in " + Error::message();
+	}
+};
+
+class NotAllowed : public Error
+{
+public:
+	NotAllowed(Model::Node* owner,QString reason) : Error(owner,reason){};
+	virtual const QString toString() override {return "Unimplemented(" + ownerToString() + ", " + message() +  ")";}
+	virtual QString message() const override
+	{
+		return "Can't create source code for node " + ownerToString() + " because " + Error::message();
+	}
+};
+
+
 
 
 //inline QList<CodeElement*> Code::children() { return children_; }

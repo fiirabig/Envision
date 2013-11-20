@@ -28,12 +28,18 @@
 
 namespace JavaExport {
 
-LayoutConfig::LayoutConfig(QString indentString) : indentString_(indentString)
+Config::Config(QString indentString, ScopeLayout curlyBraces, ScopeLayout parenthesis,
+		QString unimplementedString,QString notAllowedString_) :
+		indentString_(indentString),
+		curlyBracesLayout_(curlyBraces),
+		parenthesisLayout_(parenthesis),
+		unimplementedString_(unimplementedString),
+		notAllowedString_(notAllowedString_)
 {
 	// TODO Auto-generated constructor stub
 }
 
-LayoutConfig::~LayoutConfig()
+Config::~Config()
 {
 	// TODO Auto-generated destructor stub
 }

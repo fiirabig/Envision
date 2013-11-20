@@ -25,24 +25,54 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "javaCodeGeneration/JavaCodeElementGenerator.h"
-#include "ModifierGenerator.h"
+#include "codeGeneration/CodeElementGenerator.h"
+#include "javaCodeGeneration/JavaConfig.h"
+
 
 namespace Model
 {
 	class Node;
+	class List;
 }
+
+namespace OOModel
+{
+	class CatchClause;
+	class Enumerator;
+	class FormalArgument;
+	class FormalResult;
+	class FormalTypeArgument;
+	class MemberInitializer;
+	class Modifier;
+	class OOReference;
+	class StatementItem;
+	class StatementItemList;
+	class SwitchCase;
+}
+
 namespace JavaExport
 {
 
-class ElementGenerator: public JavaCodeElementGenerator
+class ElementGenerator: public CodeElementGenerator
 {
 public:
-	ElementGenerator();
+	ElementGenerator(Config config);
 	virtual ~ElementGenerator();
 	CodeElement* generate(Model::Node* node) const;
-private:
-	const ModifierGenerator modifierGenerator_;
+	virtual CodeElement* generate(Model::List* node) const;
+	virtual CodeElement* generate(OOModel::CatchClause* node) const;
+	virtual CodeElement* generate(OOModel::Enumerator* node) const;
+	virtual CodeElement* generate(OOModel::FormalArgument* node) const;
+	virtual CodeElement* generate(OOModel::FormalResult* node) const;
+	virtual CodeElement* generate(OOModel::FormalTypeArgument* node) const;
+	virtual CodeElement* generate(OOModel::MemberInitializer* node) const;
+	virtual CodeElement* generate(OOModel::Modifier* node) const;
+	virtual CodeElement* generate(OOModel::OOReference* node) const;
+	virtual CodeElement* generate(OOModel::StatementItemList* node) const;
+	virtual CodeElement* generate(OOModel::SwitchCase* node) const;
+
 };
+
+
 
 } /* namespace JavaExport */

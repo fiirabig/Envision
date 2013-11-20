@@ -24,42 +24,44 @@
  **
  ***********************************************************************************************************************/
 
-#include "ModuleGenerator.h"
-#include "OOModel/src/declarations/Module.h"
+#include "CodeElementGenerator.h"
 
-namespace JavaExport {
+namespace JavaExport
+{
 
-ModuleGenerator::ModuleGenerator(Config config)
-: CodeElementGenerator(config)
+CodeElementGenerator::CodeElementGenerator(Config config) : config_(config)
 {
 	// TODO Auto-generated constructor stub
+
 }
 
-ModuleGenerator::~ModuleGenerator()
-{
+CodeElementGenerator::~CodeElementGenerator() {
 	// TODO Auto-generated destructor stub
 }
 
-CodeElement* ModuleGenerator::generate(OOModel::Module* module) const
+Scope* CodeElementGenerator::curlyBraces(Model::Node* node, Model::Node* content) const
 {
-	qDebug() << "generating module " << module->name();
+	auto scope = curlyBraces(node);
+	*scope << content;
+	return scope;
+}
 
-	SourceDirectory* dir = new SourceDirectory(module,module->name());
+Scope* CodeElementGenerator::curlyBraces(Model::Node* node) const
+{
+	auto scope = new Scope(node,config_.curlyBraces());
+	return scope;
+}
 
-	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
-
-	for(auto m : *module->modules())
-		*dir << m;
-
-	return dir;
-
-	//TODO: check for completeness
+Scope* CodeElementGenerator::parenthesis(Model::Node* node) const
+{
+	auto scope = new Scope(node,config_.parentheses());
+	return scope;
+}
+Scope* CodeElementGenerator::parenthesis(Model::Node* node, Model::Node* content) const
+{
+	auto scope = parenthesis(node);
+	*scope << content;
+	return scope;
 }
 
 } /* namespace JavaExport */

@@ -29,41 +29,45 @@ class SourceDirectory;
 class CodeGenerator
 {
 public:
-	CodeGenerator();
+	CodeGenerator(Config config);
 	virtual ~CodeGenerator();
 	void printSourceFiles(Model::Node* root, const QString outputDirectory);
-	virtual LayoutConfig& layoutConfig() = 0;
+	virtual Config& config();
 
 private:
 	bool removeDir(const QString & dirName);
 	CodeElement* print(CodeElement* element);
 	void map(FileController::Cursor cursor, Model::Node* node);
 	virtual CodeElement* generate(Model::Node* node) const{return new CodeElement(node);};
+	Config config_;
 
 	class ScopeElement : public CodeElement
 	{
 	public:
-		ScopeElement(Model::Node* owner, LayoutConfig::ScopeLayout scopeLayout):
+		ScopeElement(Model::Node* owner, ScopeLayout scopeLayout):
 			CodeElement(owner), scopeLayout_(scopeLayout){}
-	inline const LayoutConfig::ScopeLayout& scopeLayout() const{ return scopeLayout_; }
+	inline const ScopeLayout& scopeLayout() const{ return scopeLayout_; }
 	private:
-		const LayoutConfig::ScopeLayout scopeLayout_;
+		const ScopeLayout scopeLayout_;
 	};
 
 	class OpenScope : public ScopeElement
 	{
 	public:
-		OpenScope(Model::Node* owner,LayoutConfig::ScopeLayout scopeLayout):
+		OpenScope(Model::Node* owner,ScopeLayout scopeLayout):
 			ScopeElement(owner,scopeLayout){}
 	};
 
 	class CloseScope : public ScopeElement
 	{
 	public:
-		CloseScope(Model::Node* owner, LayoutConfig::ScopeLayout scopeLayout):
+		CloseScope(Model::Node* owner, ScopeLayout scopeLayout):
 			ScopeElement(owner,scopeLayout){}
 	};
 
 };
+
+inline Config& CodeGenerator::config() {return config_;}
+
 
 } /* namespace JavaExport */

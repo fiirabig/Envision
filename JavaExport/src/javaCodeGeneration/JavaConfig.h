@@ -24,42 +24,20 @@
  **
  ***********************************************************************************************************************/
 
-#include "ModuleGenerator.h"
-#include "OOModel/src/declarations/Module.h"
+#pragma once
+#include "codeGeneration/LayoutConfig.h"
 
-namespace JavaExport {
-
-ModuleGenerator::ModuleGenerator(Config config)
-: CodeElementGenerator(config)
+namespace JavaExport
 {
-	// TODO Auto-generated constructor stub
-}
 
-ModuleGenerator::~ModuleGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
-
-CodeElement* ModuleGenerator::generate(OOModel::Module* module) const
-{
-	qDebug() << "generating module " << module->name();
-
-	SourceDirectory* dir = new SourceDirectory(module,module->name());
-
-	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
-
-	for(auto m : *module->modules())
-		*dir << m;
-
-	return dir;
-
-	//TODO: check for completeness
-}
+Config javaConfig();
+//{
+//	return LayoutConfig("   ", //IndentString
+//		ScopeLayout(" {", "}", true, false, true, true, true), //curlyBraces
+//		ScopeLayout("(", ")", false,false,false,false,false), //parenthese
+//		"Java", //unimplemented String => language
+//		"has no representation in Java" //
+//	);
+//}
 
 } /* namespace JavaExport */

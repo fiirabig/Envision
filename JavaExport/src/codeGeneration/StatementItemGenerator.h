@@ -24,20 +24,48 @@
  **
  ***********************************************************************************************************************/
 
-#include "JavaCodeElementGenerator.h"
+#pragma once
+#include "codeGeneration/CodeElementGenerator.h"
 
-namespace JavaExport {
-
-JavaCodeElementGenerator::JavaCodeElementGenerator()
+namespace OOModel
 {
-	// TODO Auto-generated constructor stub
+	class StatementItem;
+	class Block;
+	class BreakStatement;
+	class ContinueStatement;
+	class DeclarationStatement;
+	class ExpressionStatement;
+	class ForEachStatement;
+	class IfStatement;
+	class LoopStatement;
+	class ReturnStatement;
+	class Statement;
+	class SwitchStatement;
+	class TryCatchFinallyStatement;
 }
-
-JavaCodeElementGenerator::~JavaCodeElementGenerator()
+namespace JavaExport
 {
-	// TODO Auto-generated destructor stub
-}
+
+class StatementItemGenerator: public CodeElementGenerator
+{
+public:
+	StatementItemGenerator(Config config);
+	virtual ~StatementItemGenerator();
+	CodeElement* generate(OOModel::StatementItem* statement) const;
+	virtual CodeElement* generate(OOModel::Block* statement) const;
+	virtual CodeElement* generate(OOModel::BreakStatement* statement) const;
+	virtual CodeElement* generate(OOModel::ContinueStatement* statement) const;
+	virtual CodeElement* generate(OOModel::DeclarationStatement* statement) const;
+	virtual CodeElement* generate(OOModel::ExpressionStatement* statement) const;
+	virtual CodeElement* generate(OOModel::ForEachStatement* statement) const;
+	virtual CodeElement* generate(OOModel::IfStatement* statement) const;
+	virtual CodeElement* generate(OOModel::LoopStatement* statement) const;
+	virtual CodeElement* generate(OOModel::ReturnStatement* statement) const;
+	virtual CodeElement* generate(OOModel::Statement* statement) const;
+	virtual CodeElement* generate(OOModel::SwitchStatement* statement) const;
+	virtual CodeElement* generate(OOModel::TryCatchFinallyStatement* statement) const;
 
 
+};
 
 } /* namespace JavaExport */

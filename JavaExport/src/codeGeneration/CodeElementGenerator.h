@@ -24,42 +24,39 @@
  **
  ***********************************************************************************************************************/
 
-#include "ModuleGenerator.h"
-#include "OOModel/src/declarations/Module.h"
-
-namespace JavaExport {
-
-ModuleGenerator::ModuleGenerator(Config config)
-: CodeElementGenerator(config)
+#pragma once
+#include "codeGeneration/LayoutConfig.h"
+#include "codeGeneration/CodeElement.h"
+#include "ModelBase/src/nodes/Node.h"
+namespace JavaExport
 {
-	// TODO Auto-generated constructor stub
+
+class CodeElementGenerator
+{
+public:
+	CodeElementGenerator(Config layoutConfig);
+	virtual ~CodeElementGenerator();
+
+	Scope* curlyBraces(Model::Node* node) const;
+	Scope* curlyBraces(Model::Node* node, Model::Node* content) const;
+	Scope* parenthesis(Model::Node* node) const;
+	Scope* parenthesis(Model::Node* node, Model::Node* content) const;
+	Unimplemented* unimplemented(Model::Node* node) const;
+	NotAllowed* notAllowed(Model::Node* node) const;
+
+private:
+	Config config_;
+};
+
+
+inline Unimplemented* CodeElementGenerator::unimplemented(Model::Node* node) const
+{
+	return new Unimplemented(node, config_.unimplementedString());
 }
 
-ModuleGenerator::~ModuleGenerator()
+inline NotAllowed* CodeElementGenerator::notAllowed(Model::Node* node) const
 {
-	// TODO Auto-generated destructor stub
-}
-
-CodeElement* ModuleGenerator::generate(OOModel::Module* module) const
-{
-	qDebug() << "generating module " << module->name();
-
-	SourceDirectory* dir = new SourceDirectory(module,module->name());
-
-	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
-
-	for(auto m : *module->modules())
-		*dir << m;
-
-	return dir;
-
-	//TODO: check for completeness
+	return new NotAllowed(node, config_.notAllowedString());
 }
 
 } /* namespace JavaExport */

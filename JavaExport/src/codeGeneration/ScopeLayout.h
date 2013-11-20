@@ -24,42 +24,26 @@
  **
  ***********************************************************************************************************************/
 
-#include "ModuleGenerator.h"
-#include "OOModel/src/declarations/Module.h"
+#pragma once
 
-namespace JavaExport {
-
-ModuleGenerator::ModuleGenerator(Config config)
-: CodeElementGenerator(config)
+namespace JavaExport
 {
-	// TODO Auto-generated constructor stub
-}
 
-ModuleGenerator::~ModuleGenerator()
+class ScopeLayout
 {
-	// TODO Auto-generated destructor stub
-}
+public:
+	ScopeLayout(QString open, QString close, bool indented,	bool newLineBeforOpen,
+			bool newLineAfterOpen,bool newLineBeforeClose, bool newLineAfterClose);
 
-CodeElement* ModuleGenerator::generate(OOModel::Module* module) const
-{
-	qDebug() << "generating module " << module->name();
+	virtual ~ScopeLayout();
+	const QString openString;
+	const QString closeString;
+	const bool indented;
+	const bool newLineBeforOpen;
+	const bool newLineAfterOpen;
+	const bool newLineBeforeClose;
+	const bool newLineAfterClose;
+};
 
-	SourceDirectory* dir = new SourceDirectory(module,module->name());
-
-	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
-
-	for(auto m : *module->modules())
-		*dir << m;
-
-	return dir;
-
-	//TODO: check for completeness
-}
 
 } /* namespace JavaExport */

@@ -25,20 +25,49 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "javaCodeGeneration/JavaCodeElementGenerator.h"
+#include "CodeElementGenerator.h"
+#include "CodeElement.h"
+
+class Unimplemented;
+
+namespace Model
+{
+	class Node;
+}
+
 namespace OOModel
 {
-	class Statement;
+	class Declaration;
+	class Class;
+	class Field;
+	class Method;
+	class Module;
+	class NameImport;
+	class Project;
+	class TypeAlias;
+	class VariableDeclaration;
+	class FormalTypeArgument;
 }
-namespace JavaExport
-{
 
-class StatementGenerator: public JavaCodeElementGenerator
+
+namespace JavaExport {
+
+class AbstractDeclarationGenerator : public CodeElementGenerator
 {
 public:
-	StatementGenerator();
-	virtual ~StatementGenerator();
-	CodeElement* generate(OOModel::Statement* statement) const;
+	AbstractDeclarationGenerator(Config config);
+	virtual ~AbstractDeclarationGenerator();
+
+	CodeElement* generate(OOModel::Declaration* declaration) const;
+	virtual CodeElement* generate(OOModel::Class* declaration) const;
+	virtual CodeElement* generate(OOModel::Field* declaration) const;
+	virtual CodeElement* generate(OOModel::Method* declaration) const;
+	virtual CodeElement* generate(OOModel::Module* declaration) const;
+	virtual CodeElement* generate(OOModel::NameImport* declaration) const;
+	virtual CodeElement* generate(OOModel::Project* declaration) const;
+	virtual CodeElement* generate(OOModel::TypeAlias* declaration) const;
+	virtual CodeElement* generate(OOModel::VariableDeclaration* declaration) const;
+
 };
 
 } /* namespace JavaExport */

@@ -24,43 +24,29 @@
  **
  ***********************************************************************************************************************/
 
-#include "DeclarationGenerator.h"
-#include "OOModel/src/declarations/Declaration.h"
-#include "OOModel/src/declarations/Project.h"
-#include "OOModel/src/declarations/Module.h"
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/VariableDeclaration.h"
+#pragma once
+#include "codeGeneration/StatementItemGenerator.h"
 
-namespace JavaExport
-{
+namespace JavaExport {
 
-DeclarationGenerator::DeclarationGenerator()
-{
-	// TODO Auto-generated constructor stub
-}
+class JavaStatementItemGenerator: public StatementItemGenerator {
+public:
+	JavaStatementItemGenerator();
+	virtual ~JavaStatementItemGenerator();
 
-DeclarationGenerator::~DeclarationGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
+	virtual CodeElement* generate(OOModel::Block* statement) const override;
+	virtual CodeElement* generate(OOModel::BreakStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::ContinueStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::DeclarationStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::ExpressionStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::ForEachStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::IfStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::LoopStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::ReturnStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::Statement* statement) const override;
+	virtual CodeElement* generate(OOModel::SwitchStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::TryCatchFinallyStatement* statement) const override;
 
-CodeElement* DeclarationGenerator::generate(OOModel::Declaration* declaration) const
-{
-	if(auto project = dynamic_cast<OOModel::Project*>(declaration))
-		return projectGenerator_.generate(project);
-	else if(auto module = dynamic_cast<OOModel::Module*>(declaration))
-		return moduleGenerator_.generate(module);
-	else if(auto c = dynamic_cast<OOModel::Class*>(declaration))
-		return classGenerator_.generate(c);
-	else if(auto decl = dynamic_cast<OOModel::VariableDeclaration*>(declaration))
-		return variableDeclarationGenerator_.generate(decl);
-	else
-	{
-		qDebug() << "unimplemented " << declaration->symbolName();
-		Q_ASSERT(false && "unimplemented");
-		return nullptr;
-	}
-
-}
+};
 
 } /* namespace JavaExport */

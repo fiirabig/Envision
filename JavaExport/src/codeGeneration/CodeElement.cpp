@@ -27,7 +27,8 @@
 #include "CodeElement.h"
 #include "ModelBase/src/nodes/Node.h"
 
-namespace JavaExport {
+namespace JavaExport
+{
 
 CodeElement::CodeElement(Model::Node* owner) : owner_(owner)
 {

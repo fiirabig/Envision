@@ -29,7 +29,7 @@
 
 namespace JavaExport {
 
-ProjectGenerator::ProjectGenerator() {
+ProjectGenerator::ProjectGenerator(Config config) : CodeElementGenerator(config){
 	// TODO Auto-generated constructor stub
 
 }

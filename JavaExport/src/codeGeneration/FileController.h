@@ -26,6 +26,7 @@
 
 #pragma once
 #include "LayoutConfig.h"
+#include "ScopeLayout.h"
 #include <QDir>
 
 
@@ -41,12 +42,12 @@ class FileController {
 		void advanceSymbol(int amount) { symbol += amount; }
 	};
 
-		FileController(LayoutConfig config,SourceFile* file);
+		FileController(Config config,SourceFile* file);
 		virtual ~FileController();
 		void print(const QString&);
 		void printNewLine();
-		void openScope(const LayoutConfig::ScopeLayout&);
-		void closeScope(const LayoutConfig::ScopeLayout&);
+		void openScope(const ScopeLayout&);
+		void closeScope(const ScopeLayout&);
 		Cursor cursor() const;
 
 	private:
@@ -55,8 +56,7 @@ class FileController {
 		QTextStream stream_{};
 		int indent_{};
 		Cursor cursor_;
-		QList<LayoutConfig::ScopeLayout> openScopes_;
-		LayoutConfig config_;
+		Config config_;
 };
 
 inline FileController::Cursor FileController::cursor() const {return cursor_; }

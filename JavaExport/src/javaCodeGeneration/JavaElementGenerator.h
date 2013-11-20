@@ -25,37 +25,28 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "codeGeneration/LayoutConfig.h"
-#include "codeGeneration/CodeElement.h"
-
-namespace Model
-{
-	class Node;
-}
+#include "codeGeneration/ElementGenerator.h"
 
 namespace JavaExport
 {
 
-class JavaCodeElementGenerator
+class JavaElementGenerator: public ElementGenerator
 {
 public:
-	JavaCodeElementGenerator();
-	virtual ~JavaCodeElementGenerator();
+	JavaElementGenerator();
+	virtual ~JavaElementGenerator();
+	virtual CodeElement* generate(OOModel::CatchClause* node) const override;
+	virtual CodeElement* generate(OOModel::Enumerator* node) const override;
+	virtual CodeElement* generate(OOModel::FormalArgument* node) const override;
+	virtual CodeElement* generate(OOModel::FormalResult* node) const override;
+	virtual CodeElement* generate(OOModel::FormalTypeArgument* node) const override;
+	virtual CodeElement* generate(OOModel::MemberInitializer* node) const override;
+	virtual CodeElement* generate(OOModel::Modifier* node) const override;
+	virtual CodeElement* generate(OOModel::OOReference* node) const override;
+	virtual CodeElement* generate(OOModel::StatementItemList* node) const override;
+	virtual CodeElement* generate(OOModel::SwitchCase* scase) const override;
 
-	Scope* curlyBraces(Model::Node* node) const;
-	Scope* parenthesis(Model::Node* node) const;
-private:
-	LayoutConfig::ScopeLayout curlyBracesLayout_{" {", "}",true,false,true,true,true};
-	LayoutConfig::ScopeLayout parenthesisLayout_{"(", ")", false,false,false,false,false};
+
 };
 
-inline Scope* JavaCodeElementGenerator::curlyBraces(Model::Node* node) const
-{
-	return new Scope(node,curlyBracesLayout_);
-}
-
-inline Scope* JavaCodeElementGenerator::parenthesis(Model::Node* node) const
-{
-	return new Scope(node,parenthesisLayout_);
-}
 } /* namespace JavaExport */

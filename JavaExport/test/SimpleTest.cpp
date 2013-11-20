@@ -25,11 +25,11 @@
  **********************************************************************************************************************/
 
 #include "javaexport.h"
-#include "SourceToASTMap.h"
-#include "SourcePrinter.h"
+//#include "SourceToASTMap.h"
+//#include "SourcePrinter.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "OOModel/src/allOOModelNodes.h"
-#include "SourceBuilder.h"
+//#include "SourceBuilder.h"
 #include "FilePersistence/src/FileStore.h"
 
 #include "FilePersistence/src/filepersistence.h"
@@ -37,7 +37,7 @@
 
 #include "javaCodeGeneration/JavaCodeGenerator.h"
 #include "src/codeGeneration/FileController.h"
-#include "src/codeGeneration/LayoutConfig.h"
+//#include "src/codeGeneration/LayoutConfig.h"
 using namespace OOModel;
 
 namespace JavaExport {

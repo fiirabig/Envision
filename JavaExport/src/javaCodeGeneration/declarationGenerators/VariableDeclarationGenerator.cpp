@@ -30,7 +30,8 @@
 namespace JavaExport
 {
 
-VariableDeclarationGenerator::VariableDeclarationGenerator()
+VariableDeclarationGenerator::VariableDeclarationGenerator(Config config)
+: CodeElementGenerator(config)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -43,7 +44,7 @@ VariableDeclarationGenerator::~VariableDeclarationGenerator()
 CodeElement* VariableDeclarationGenerator::generate(OOModel::VariableDeclaration* decl) const
 {
 	auto code = new Code(decl);
-	*code << decl->modifiers() << " " << decl->typeExpression() << " " << decl->name();
+	*code << decl->modifiers()  << decl->typeExpression() << " " << decl->name();
 
 	if(auto initValue = decl->initialValue())
 	{

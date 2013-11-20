@@ -25,37 +25,34 @@
  **********************************************************************************************************************/
 
 #pragma once
-
+#include "ScopeLayout.h"
 namespace JavaExport {
 
-class LayoutConfig {
+class Config
+{
 	public:
-		LayoutConfig(QString);
-		virtual ~LayoutConfig();
+		Config(QString indentString, ScopeLayout curlyBraces, ScopeLayout parenthesis,
+				QString unimplementedString,QString notAllowedString_);
+		virtual ~Config();
+
 		const QString& indentString() const;
-
-		struct ScopeLayout {
-				ScopeLayout(QString open, QString close, bool indented,
-						bool newLineBeforOpen, bool newLineAfterOpen,
-						bool newLineBeforeClose, bool newLineAfterClose):
-					openString(open),closeString(close),indented(indented),
-					newLineBeforOpen(newLineBeforOpen),newLineAfterOpen(newLineAfterOpen),
-					newLineBeforeClose(newLineBeforeClose),newLineAfterClose(newLineAfterClose)
-				{}
-				const QString openString;
-				const QString closeString;
-				const bool indented;
-				const bool newLineBeforOpen;
-				const bool newLineAfterOpen;
-				const bool newLineBeforeClose;
-				const bool newLineAfterClose;
-		};
-
+		const ScopeLayout& curlyBraces() const;
+		const ScopeLayout& parentheses() const;
+		const QString& unimplementedString() const;
+		const QString& notAllowedString() const;
 
 	private:
 		const QString indentString_;
+		const ScopeLayout curlyBracesLayout_;
+		const ScopeLayout parenthesisLayout_;
+		const QString unimplementedString_;
+		const QString notAllowedString_;
 };
 
-inline const QString& LayoutConfig::indentString() const { return indentString_; }
+inline const QString& Config::indentString() const { return indentString_; }
+inline const ScopeLayout& Config::curlyBraces() const { return curlyBracesLayout_; }
+inline const ScopeLayout& Config::parentheses() const { return parenthesisLayout_; }
+inline const QString& Config::unimplementedString() const { return unimplementedString_; }
+inline const QString& Config::notAllowedString() const { return notAllowedString_; }
 
 } /* namespace JavaExport */

@@ -27,13 +27,17 @@
 #include "ModifierGenerator.h"
 #include "OOModel/src/elements/Modifier.h"
 
-namespace JavaExport {
+namespace JavaExport
+{
 
-ModifierGenerator::ModifierGenerator() {
+ModifierGenerator::ModifierGenerator(Config config)
+:CodeElementGenerator(config)
+{
 	// TODO Auto-generated constructor stub
 }
 
-ModifierGenerator::~ModifierGenerator() {
+ModifierGenerator::~ModifierGenerator()
+{
 	// TODO Auto-generated destructor stub
 }
 
@@ -65,6 +69,8 @@ CodeElement* JavaExport::ModifierGenerator::generate(OOModel::Modifier* modifier
 		if(first) first = false; else *code << " ";
 		*code << ("static");
 	}
+
+	Q_ASSERT(false && "using modifierprinter this class needs to be removed!!");
 
 	return code;
 }

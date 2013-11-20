@@ -6,16 +6,16 @@
  */
 
 #pragma once
-#include "javaCodeGeneration/JavaCodeElementGenerator.h"
+#include "codeGeneration/CodeElementGenerator.h"
 #include "codeGeneration/CodeGenerator.h"
 #include "OOModel/src/allOOModelNodes.h"
 #include "codeGeneration/CodeElement.h"
 
 namespace JavaExport {
 
-class ClassGenerator : public JavaCodeElementGenerator {
+class ClassGenerator : public CodeElementGenerator {
 public:
-	ClassGenerator();
+	ClassGenerator(Config config);
 	virtual ~ClassGenerator();
 
 	virtual CodeElement* generate(OOModel::Class* c) const ;

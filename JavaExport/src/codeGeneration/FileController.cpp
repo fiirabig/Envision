@@ -27,12 +27,13 @@
 #include "FileController.h"
 #include "CodeElement.h"
 
-namespace JavaExport {
+namespace JavaExport
+{
 
 
-FileController::FileController(LayoutConfig config,SourceFile* file):
-		//qFile_("source_code/bla")
-		qFile_(file->parentDirectory()->qDir().absolutePath() + "/" + file->name() + "." + file->fileExtension()),
+FileController::FileController(Config config,SourceFile* file):
+		qFile_(file->parentDirectory()->qDir().absolutePath() + "/"
+				+ file->name() + "." + file->fileExtension()),
 		config_(config)
 {
 	qDebug() << file;
@@ -44,9 +45,7 @@ FileController::FileController(LayoutConfig config,SourceFile* file):
 
 FileController::~FileController()
 {
-	Q_ASSERT(openScopes_.isEmpty());
 	qFile_.close();
-
 }
 
 void FileController::print(const QString& text)
@@ -58,9 +57,9 @@ void FileController::print(const QString& text)
 	qDebug() << "finished printing to file" << flush;
 }
 
-void FileController::openScope(const LayoutConfig::ScopeLayout& scope)
+void FileController::openScope(const ScopeLayout& scope)
 {
-	//openScopes_.append(scope);
+
 	if(scope.newLineBeforOpen) printNewLine();
 	//qDebug() << scope.openString;
 	print(scope.openString);
@@ -68,10 +67,8 @@ void FileController::openScope(const LayoutConfig::ScopeLayout& scope)
 	if(scope.newLineAfterOpen) printNewLine();
 }
 
-void FileController::closeScope(const LayoutConfig::ScopeLayout& scope)
+void FileController::closeScope(const ScopeLayout& scope)
 {
-	//Q_ASSERT(!openScopes_.isEmpty());
-	//LayoutConfig::ScopeLayout scope = openScopes_.takeLast();
 	if(scope.indented) indent_--;
 	if(scope.newLineBeforeClose) printNewLine();
 	print(scope.closeString);

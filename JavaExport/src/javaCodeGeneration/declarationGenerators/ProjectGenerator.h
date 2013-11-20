@@ -25,7 +25,7 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "javaCodeGeneration/JavaCodeElementGenerator.h"
+#include "codeGeneration/CodeElementGenerator.h"
 
 namespace OOModel
 {
@@ -33,9 +33,10 @@ namespace OOModel
 }
 namespace JavaExport {
 
-class ProjectGenerator: public JavaCodeElementGenerator {
+class ProjectGenerator: public CodeElementGenerator
+{
 public:
-	ProjectGenerator();
+	ProjectGenerator(Config config);
 	virtual ~ProjectGenerator();
 	CodeElement* generate(OOModel::Project* project) const;
 };

@@ -25,30 +25,50 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "javaCodeGeneration/JavaCodeElementGenerator.h"
+#include "codeGeneration/AbstractDeclarationGenerator.h"
 #include "ProjectGenerator.h"
 #include "ModuleGenerator.h"
 #include "ClassGenerator.h"
 #include "VariableDeclarationGenerator.h"
+#include "javaCodeGeneration/JavaConfig.h"
 
 namespace OOModel
 {
 	class Declaration;
+	class Class;
+	class Field;
+	class Method;
+	class Module;
+	class NameImport;
+	class Project;
+	class TypeAlias;
+	class VariableDeclaration;
+	class FormalTypeArgument;
 }
 
 namespace JavaExport
 {
 
-class DeclarationGenerator: public JavaCodeElementGenerator {
+class JavaDeclarationGenerator: public AbstractDeclarationGenerator
+{
 public:
-	DeclarationGenerator();
-	virtual ~DeclarationGenerator();
-	CodeElement* generate(OOModel::Declaration* declaration) const;
+	JavaDeclarationGenerator();
+	virtual ~JavaDeclarationGenerator();
+	virtual CodeElement* generate(OOModel::Class* declaration) const override;
+	virtual CodeElement* generate(OOModel::Field* declaration) const override;
+	virtual CodeElement* generate(OOModel::Method* declaration) const override;
+	virtual CodeElement* generate(OOModel::Module* declaration) const override;
+	virtual CodeElement* generate(OOModel::NameImport* declaration) const override;
+	virtual CodeElement* generate(OOModel::Project* declaration) const override;
+	virtual CodeElement* generate(OOModel::TypeAlias* declaration) const override;
+	virtual CodeElement* generate(OOModel::VariableDeclaration* declaration) const override;
+
 private:
-	const ProjectGenerator projectGenerator_;
-	const ModuleGenerator moduleGenerator_;
-	const ClassGenerator classGenerator_;
-	const VariableDeclarationGenerator variableDeclarationGenerator_;
+	const ProjectGenerator projectGenerator_{javaConfig()};
+	const ModuleGenerator moduleGenerator_{javaConfig()};
+	const ClassGenerator classGenerator_{javaConfig()};
+	const VariableDeclarationGenerator variableDeclarationGenerator_{javaConfig()};
 };
+
 
 } /* namespace JavaExport */

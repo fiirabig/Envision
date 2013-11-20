@@ -27,12 +27,12 @@
 #pragma once
 
 #include "codeGeneration/CodeGenerator.h"
-#include "codeGeneration/LayoutConfig.h"
+#include "JavaConfig.h"
 
-#include "declarationGenerators/DeclarationGenerator.h"
-#include "statementGenerators/StatementGenerator.h"
+#include "declarationGenerators/JavaDeclarationGenerator.h"
+#include "javaCodeGeneration/JavaStatementItemGenerator.h"
 #include "expressionGenerators/ExpressionGenerator.h"
-#include "elementGenerators/ElementGenerator.h"
+#include "javaCodeGeneration/JavaElementGenerator.h"
 
 
 namespace Model
@@ -48,24 +48,15 @@ public:
 	JavaCodeGenerator();
 	virtual ~JavaCodeGenerator();
 	virtual CodeElement* generate(Model::Node*  element) const override;
-	virtual LayoutConfig& layoutConfig() override;
-	Scope* curlyBraces(Model::Node* node) const;
-	Scope* parenthesis(Model::Node* node) const;
 
-private: //TODO: moved to JavaCodeElementGenerator
-	LayoutConfig config_{"    "};
-	LayoutConfig::ScopeLayout curlyBracesLayout_{" {", "}",true,false,true,true,true};
-	LayoutConfig::ScopeLayout parenthesisLayout_{"(", ")", false,false,false,false,false};
+private:
 
-	const DeclarationGenerator declarationGenerator_;
-	const StatementGenerator statementGenerator_;
-	const ExpressionGenerator expressionGenerator_;
-	const ElementGenerator elementGenerator_;
+	const JavaDeclarationGenerator declarationGenerator_{};
+	const JavaStatementItemGenerator statementGenerator_{};
+	const ExpressionGenerator expressionGenerator_{javaConfig()};
+	const JavaElementGenerator elementGenerator_{};
 
 };
 
-inline LayoutConfig& JavaCodeGenerator::layoutConfig() {return config_;}
-
-
-} /* namespace JavaExport */
+}/* namespace JavaExport */
 

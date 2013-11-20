@@ -12,12 +12,18 @@
 #include "OOModel/src/statements/Statement.h"
 #include "OOModel/src/expressions/Expression.h"
 #include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
 #include <QDir>
 
 
-namespace JavaExport {
+namespace JavaExport
+{
 
-CodeGenerator::CodeGenerator(){}
+CodeGenerator::CodeGenerator(Config config): config_(config)
+{
+
+}
 
 CodeGenerator::~CodeGenerator()
 {
@@ -66,6 +72,7 @@ void CodeGenerator::printSourceFiles(Model::Node* root, const QString outputDire
 CodeElement* CodeGenerator::print(CodeElement* element)
 {
 	Q_ASSERT(element->parentDirectory() && "element has no parent directory");
+	//TODO: report
 	qDebug() << "\nstarting to print element" << element->toString();
 
 	if(auto sourceDir = dynamic_cast<SourceDirectory*>(element))
@@ -87,7 +94,7 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 	{
 		qDebug()<< "\tprinting SourceFile " << file->toString();
 
-		auto fc = new FileController(layoutConfig(),file);
+		auto fc = new FileController(config(),file);
 		file->setFileController(fc);
 
 		qDebug() << "\tfinished printing SourceFile " << file->toString();
@@ -96,6 +103,7 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 	else if(auto scope = dynamic_cast<Scope*>(element))
 	{
 		qDebug() << "\tprinting scope" << scope->toString() << flush;
+
 		scope->content().prepend(new OpenScope(scope->owner(),scope->scopeLayout()));
 		scope->content().append(new CloseScope(scope->owner(),scope->scopeLayout()));
 
@@ -119,9 +127,12 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 	}
 
 	else if(auto openScope = dynamic_cast<OpenScope*>(element)) {
+
 		qDebug() << "\tprinting openScope";
+
 		openScope->sourceFile()->fileController()->openScope(openScope->scopeLayout());
 		map(openScope->sourceFile()->fileController()->cursor(),openScope->owner());
+
 		qDebug() << "\tfinished printing openScope";
 
 		delete openScope;
@@ -130,19 +141,24 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 
 	else if(auto closeScope = dynamic_cast<CloseScope*>(element))
 	{
-		qDebug() << "\tprinting openScope";
+		qDebug() << "\tprinting closeScope";
+
 		closeScope->sourceFile()->fileController()->closeScope(closeScope->scopeLayout());
 		map(closeScope->sourceFile()->fileController()->cursor(),closeScope->owner());
-		qDebug() << "\tfinished printing openScope";
+
+		qDebug() << "\tfinished printing closeScope";
 
 		delete closeScope;
 		return nullptr;
 	}
 
 	else if(auto newLine = dynamic_cast<NewLine*>(element)) {
+
 		qDebug() << "\tprinting newLine";
+
 		newLine->sourceFile()->fileController()->printNewLine();
 		map(newLine->sourceFile()->fileController()->cursor(),newLine->owner());
+
 		qDebug() << "\tfinished printing newLine";
 
 		delete newLine;
@@ -150,10 +166,13 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 	}
 
 	else if(auto package = dynamic_cast<Package*>(element)) {
+
 		qDebug() << "\tprinting package";
+
 		//TODO:
 		Q_ASSERT(false && "not implemented package");
 		map(package->sourceFile()->fileController()->cursor(),package->owner());
+
 		qDebug() << "\tfinished printing package";
 
 		delete package;
@@ -161,13 +180,29 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 	}
 
 	else if(auto ignore = dynamic_cast<Ignore*>(element)) {
+
 		qDebug() << "\tprinting ignore";
+
 		//TODO:
-		Q_ASSERT(false && "not implemented ignore");
-		map(ignore->sourceFile()->fileController()->cursor(),ignore->owner());
+		//Q_ASSERT(false && "not implemented ignore");
+
 		qDebug() << "\tfinished printing ignore";
 
 		delete ignore;
+		return nullptr;
+	}
+
+	else if(auto error = dynamic_cast<Error*>(element)) {
+
+		qDebug() << "\tprinting error" << error->toString();
+
+		//TODO:
+		qDebug() << error->message();
+		Q_ASSERT(false && "not implemented error");
+
+		qDebug() << "\tfinished printing error";
+
+		delete error;
 		return nullptr;
 	}
 
@@ -179,8 +214,8 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 		while(!container->content().isEmpty())
 		{
 			auto next = container->content().takeFirst();
-			qDebug() << "\t\tcontainer is " << container->toString();
-			qDebug() << "\t\ttaking first element from container and initializing it" << next->toString();
+		//	qDebug() << "\t\tcontainer is " << container->toString();
+		//	qDebug() << "\t\ttaking first element from container and initializing it" << next->toString();
 
 			if(!next->parentDirectory())
 			{
@@ -195,17 +230,17 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 			{
 				if(auto file = dynamic_cast<SourceFile*>(container))
 				{
-					qDebug() << "container is  sourcefile " << container->toString();
-					qDebug() << "setting sourcefile to container...";
+					//qDebug() << "container is  sourcefile " << container->toString();
+					//qDebug() << "setting sourcefile to container...";
 					next->setSourceFile(file);
-					qDebug() << "source file of " << next->toString() << "is now " << next->sourceFile()->toString();
+					//qDebug() << "source file of " << next->toString() << "is now " << next->sourceFile()->toString();
 				}
 
 				else next->setSourceFile(container->sourceFile());
 				//qDebug() << "\t\tset parentDirectory of";
 			}
 
-			qDebug() << "finished initializing " << next->toString() << flush;
+			//qDebug() << "finished initializing " << next->toString() << flush;
 
 			if(auto printed = print(next))
 			{
@@ -213,7 +248,7 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 				qDebug() << "\t\tadded "<< printed->toString() << " to container" << container->toString();
 			}
 		}
-		qDebug() << "finished printing container" << container->toString() << "\n" << flush;
+		qDebug() << "\tfinished printing container" << container->toString() << "\n" << flush;
 
 		Q_ASSERT(container->content().isEmpty());
 		delete container;

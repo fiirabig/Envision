@@ -24,25 +24,18 @@
  **
  ***********************************************************************************************************************/
 
-#include "StatementGenerator.h"
-#include "OOModel/src/statements/Statement.h"
+#include "JavaConfig.h"
 
-namespace JavaExport {
-
-StatementGenerator::StatementGenerator() {
-	// TODO Auto-generated constructor stub
-
-}
-
-StatementGenerator::~StatementGenerator() {
-	// TODO Auto-generated destructor stub
-}
-
-CodeElement* StatementGenerator::generate(OOModel::Statement* statement) const
+namespace JavaExport
 {
-	qDebug() << "unimplemented " << statement->symbolName();
-	Q_ASSERT(false && "unimplemented");
-	return nullptr;
-}
 
+Config javaConfig()
+{
+	return Config("   ", //IndentString
+		ScopeLayout(" {", "}", true, false, true, true, true), //curlyBraces
+		ScopeLayout("(", ")", false,false,false,false,false), //parenthese
+		"Java", //unimplemented String => language
+		"has no representation in Java" //
+		);
+}
 } /* namespace JavaExport */

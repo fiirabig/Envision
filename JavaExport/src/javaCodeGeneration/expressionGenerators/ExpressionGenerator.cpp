@@ -32,7 +32,8 @@ using namespace OOModel;
 namespace JavaExport
 {
 
-ExpressionGenerator::ExpressionGenerator()
+ExpressionGenerator::ExpressionGenerator(Config config)
+: CodeElementGenerator(config)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -230,6 +231,7 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		*code << "new " << newExpression->newType();
 		if(newExpression->amount())
 			*code << "[" << newExpression->amount() << "]";
+		else *code << "()";
 	}
 
 	else if(auto methodCallExpression = dynamic_cast<MethodCallExpression*>(expr))
@@ -243,6 +245,74 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		}
 		*code << ")";
 	}
+
+	else if(auto assignmentExpression = dynamic_cast<AssignmentExpression*>(expr))
+	{
+		*code << assignmentExpression->left();
+		switch(assignmentExpression->op())
+		{
+			case AssignmentExpression::ASSIGN: *code << " = "; break;
+			case AssignmentExpression::PLUS_ASSIGN: *code << " += "; break;
+			case AssignmentExpression::MINUS_ASSIGN: *code << " -= "; break;
+			case AssignmentExpression::TIMES_ASSIGN: *code << " *= "; break;
+			case AssignmentExpression::DIVIDE_ASSIGN: *code << " /= "; break;
+			case AssignmentExpression::BIT_AND_ASSIGN: *code << " &= "; break;
+			case AssignmentExpression::BIT_OR_ASSIGN: *code << " |= "; break;
+			case AssignmentExpression::BIT_XOR_ASSIGN: *code << " ^= "; break;
+			case AssignmentExpression::REMAINDER_ASSIGN: *code << " %= "; break;
+			case AssignmentExpression::LEFT_SHIFT_ASSIGN: *code << " <<= "; break;
+			case AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: *code << " >>= "; break;
+
+			//TODO:
+			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: Q_ASSERT(false); break; //TODO: add error
+			default : Q_ASSERT(false && assignmentExpression->op());
+
+		}
+		*code << assignmentExpression->right();
+	}
+	else if(auto emptyExpression = dynamic_cast<EmptyExpression*>(expr))
+		return new NewLine(emptyExpression);
+	else if(auto throwExpr = dynamic_cast<ThrowExpression*>(expr))
+	{
+		auto code = new Code(throwExpr);
+		*code << "throw " << throwExpr->expr();
+		return code;
+	}
+
+	/*
+	 *
+	}else if(auto deleteExpression = dynamic_cast<DeleteExpression*>(expr)) {
+		if(verbose) qDebug() << "expression is DeleteExpression";
+		//TODO:
+		Q_ASSERT(false && deleteExpression);
+
+
+	}else if(auto errorExpression = dynamic_cast<ErrorExpression*>(expr)) {
+		if(verbose) qDebug() << "expression is ErrorExpression";
+		//TODO:
+		Q_ASSERT(false && errorExpression);
+
+	}else if(auto lambdaExpression = dynamic_cast<LambdaExpression*>(expr)) {
+		if(verbose) qDebug() << "expression is LambdaExpression";
+		//TODO:
+		Q_ASSERT(false && lambdaExpression);
+
+	}else if(auto throwExpression = dynamic_cast<ThrowExpression*>(expr)) {
+		if(verbose) qDebug() << "expression is ThrowExpression";
+		//TODO:
+		Q_ASSERT(false && throwExpression);
+
+	}else if(auto typeTraitExpression = dynamic_cast<TypeTraitExpression*>(expr)) {
+		if(verbose) qDebug() << "expression is TypeTraitExpression";
+		//TODO:
+		Q_ASSERT(false && typeTraitExpression);
+
+	}else if(auto unfinishedOperator = dynamic_cast<UnfinishedOperator*>(expr)) {
+		if(verbose) qDebug() << "expression is UnfinishedOperator";
+		//TODO:
+		Q_ASSERT(false && unfinishedOperator);
+	 *
+	 */
 
 
 	else
