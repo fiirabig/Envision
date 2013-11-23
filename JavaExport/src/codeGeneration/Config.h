@@ -26,33 +26,34 @@
 
 #pragma once
 #include "ScopeLayout.h"
-namespace JavaExport {
+namespace JavaExport
+{
 
 class Config
 {
 	public:
 		Config(QString indentString, ScopeLayout curlyBraces, ScopeLayout parenthesis,
-				QString unimplementedString,QString notAllowedString_);
+				QString languageName,QString notAllowedString);
 		virtual ~Config();
 
 		const QString& indentString() const;
 		const ScopeLayout& curlyBraces() const;
 		const ScopeLayout& parentheses() const;
-		const QString& unimplementedString() const;
+		const QString& languageName() const;
 		const QString& notAllowedString() const;
 
 	private:
 		const QString indentString_;
 		const ScopeLayout curlyBracesLayout_;
 		const ScopeLayout parenthesisLayout_;
-		const QString unimplementedString_;
+		const QString languageName_; //TODO: rename to
 		const QString notAllowedString_;
 };
 
 inline const QString& Config::indentString() const { return indentString_; }
 inline const ScopeLayout& Config::curlyBraces() const { return curlyBracesLayout_; }
 inline const ScopeLayout& Config::parentheses() const { return parenthesisLayout_; }
-inline const QString& Config::unimplementedString() const { return unimplementedString_; }
+inline const QString& Config::languageName() const { return languageName_; }
 inline const QString& Config::notAllowedString() const { return notAllowedString_; }
 
 } /* namespace JavaExport */

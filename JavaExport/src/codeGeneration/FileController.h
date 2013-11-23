@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
-#include "LayoutConfig.h"
+#include "Config.h"
 #include "ScopeLayout.h"
 #include <QDir>
 

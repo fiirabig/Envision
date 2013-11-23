@@ -46,6 +46,8 @@ public:
 	virtual CodeElement* generate(OOModel::Statement* statement) const override;
 	virtual CodeElement* generate(OOModel::SwitchStatement* statement) const override;
 	virtual CodeElement* generate(OOModel::TryCatchFinallyStatement* statement) const override;
+	virtual CodeElement* generate(OOModel::CaseStatement* statement) const override;
+
 
 };
 

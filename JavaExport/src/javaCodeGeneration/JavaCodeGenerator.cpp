@@ -31,7 +31,7 @@ CodeElement* JavaCodeGenerator::generate(Model::Node* node) const
 	if(!node) return nullptr;
 	//TODO: ask mitko
 	if(auto declaration = dynamic_cast<OOModel::Declaration*>(node))
-		return declarationGenerator_.AbstractDeclarationGenerator::generate(declaration);
+		return declarationGenerator_.DeclarationGenerator::generate(declaration);
 	else if(auto statement = dynamic_cast<OOModel::StatementItem*>(node))
 		return statementGenerator_.StatementItemGenerator::generate(statement);
 	else if(auto expression = dynamic_cast<OOModel::Expression*>(node))

@@ -24,42 +24,52 @@
  **
  ***********************************************************************************************************************/
 
-#include "ModuleGenerator.h"
-#include "OOModel/src/declarations/Module.h"
+#pragma once
+#include "CodeElementGenerator.h"
+#include "CodeElement.h"
+
+class Unimplemented;
+
+namespace Model
+{
+	class Node;
+}
+
+namespace OOModel
+{
+	class Declaration;
+	class Class;
+	class Field;
+	class Method;
+	class Module;
+	class NameImport;
+	class Project;
+	class TypeAlias;
+	class VariableDeclaration;
+	class FormalTypeArgument;
+	class ExplicitTemplateInstantiation;
+}
+
 
 namespace JavaExport {
 
-ModuleGenerator::ModuleGenerator(Config config)
-: CodeElementGenerator(config)
+class DeclarationGenerator : public CodeElementGenerator
 {
-	// TODO Auto-generated constructor stub
-}
+public:
+	DeclarationGenerator(Config config);
+	virtual ~DeclarationGenerator();
 
-ModuleGenerator::~ModuleGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
+	CodeElement* generate(OOModel::Declaration* declaration) const;
+	virtual CodeElement* generate(OOModel::Class* declaration) const;
+	virtual CodeElement* generate(OOModel::ExplicitTemplateInstantiation* declaration) const;
+	virtual CodeElement* generate(OOModel::Field* declaration) const;
+	virtual CodeElement* generate(OOModel::Method* declaration) const;
+	virtual CodeElement* generate(OOModel::Module* declaration) const;
+	virtual CodeElement* generate(OOModel::NameImport* declaration) const;
+	virtual CodeElement* generate(OOModel::Project* declaration) const;
+	virtual CodeElement* generate(OOModel::TypeAlias* declaration) const;
+	virtual CodeElement* generate(OOModel::VariableDeclaration* declaration) const;
 
-CodeElement* ModuleGenerator::generate(OOModel::Module* module) const
-{
-	qDebug() << "generating module " << module->name();
-
-	SourceDirectory* dir = new SourceDirectory(module,module->name());
-
-	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
-
-	for(auto m : *module->modules())
-		*dir << m;
-
-	return dir;
-
-	//TODO: check for completeness
-}
+};
 
 } /* namespace JavaExport */

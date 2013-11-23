@@ -25,9 +25,14 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "codeGeneration/LayoutConfig.h"
+#include "codeGeneration/Config.h"
 #include "codeGeneration/CodeElement.h"
-#include "ModelBase/src/nodes/Node.h"
+
+namespace Model
+{
+	class Node;
+	class List;
+}
 namespace JavaExport
 {
 
@@ -42,7 +47,29 @@ public:
 	Scope* parenthesis(Model::Node* node) const;
 	Scope* parenthesis(Model::Node* node, Model::Node* content) const;
 	Unimplemented* unimplemented(Model::Node* node) const;
-	NotAllowed* notAllowed(Model::Node* node) const;
+	CodeElement* notAllowed(Model::Node* node) const;
+	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString first, QString separator, QString last) const;
+	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString first, QString last) const;
+	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString separator) const;
+	CodeElement* allowedWithExactAmount(Model::List* list, int amount, QString parentName, QString childName) const;
+	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount, QString parentName, QString childName,
+			QString first, QString separator, QString last) const;
+	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString first, QString last) const;
+	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString separator) const;
+	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount, QString parentName, QString childName) const;
+	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount,QString parentName, QString childName,
+			QString first, QString separator, QString last) const;
+	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount, QString parentName, QString childName,
+			QString first, QString last) const;
+	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount, QString parentName, QString childName,
+			QString separator) const;
+	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount,QString parentName, QString childName) const;
+
 
 private:
 	Config config_;
@@ -51,11 +78,14 @@ private:
 
 inline Unimplemented* CodeElementGenerator::unimplemented(Model::Node* node) const
 {
-	return new Unimplemented(node, config_.unimplementedString());
+	return new Unimplemented(node, config_.languageName());
 }
 
-inline NotAllowed* CodeElementGenerator::notAllowed(Model::Node* node) const
+inline CodeElement* CodeElementGenerator::notAllowed(Model::Node* node) const
 {
+	if(auto list = dynamic_cast<Model::List*>(node))
+		if(list->size() == 0)
+			return new Ignore(list);
 	return new NotAllowed(node, config_.notAllowedString());
 }
 

@@ -25,31 +25,72 @@
  **********************************************************************************************************************/
 
 #include "javaexport.h"
-//#include "SourceToASTMap.h"
-//#include "SourcePrinter.h"
+
+//#include "filepersistence.h"
+//#include "FileStore.h"
+//#include "simple/SimpleTextFileStore.h"
+//#include "SelfTest/src/SelfTestSuite.h"
+
+#include "ModelBase/src/persistence/PersistedNode.h"
+#include "ModelBase/src/persistence/PersistedValue.h"
+
 #include "SelfTest/src/SelfTestSuite.h"
 #include "OOModel/src/allOOModelNodes.h"
-//#include "SourceBuilder.h"
+
 #include "FilePersistence/src/FileStore.h"
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
+
 
 #include "FilePersistence/src/filepersistence.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "javaCodeGeneration/JavaCodeGenerator.h"
 #include "src/codeGeneration/FileController.h"
-//#include "src/codeGeneration/LayoutConfig.h"
+
 using namespace OOModel;
 
 namespace JavaExport {
 
 TEST(JavaExport, SimpleTest)
 {
-	QString testDir = "projects/";
+	/*
+	 * 	{
+		PersistentStore* store{};
+
+		if (i==0)
+		{
+
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
+
+		typedef PersistedValue< QString >* String;
+		typedef PersistedValue< QList<PersistedNode*> >* Composite;
+
+		// Root Node
+		Composite root = dynamic_cast<Composite> (store->loadCompleteNodeSubtree("units", nullptr));
+	 */
+
+//	//PersistentStore* store{};
+//	auto s = new FilePersistence::SimpleTextFileStore();
+//	s->setBaseFolder("/home/marti/git/Envision/DebugBuild");
+//	//store = s;
+//
+//	//typedef Model::PersistedValue< QList<Model::PersistedNode*> >* Composite;
+//	auto root = dynamic_cast<Model::Node*> (s->loadCompleteNodeSubtree("marti", nullptr));
+
+	QString testDir = "/home/marti/git/Envision/DebugBuild";
 	Model::Model* model = new Model::Model();
-	FilePersistence::FileStore store;
+	FilePersistence::SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
-	model->load(&store, "marti");
+	model->load(&store, "marti",false);
 
 	JavaCodeGenerator generator;
 	generator.printSourceFiles(model->root(), "source_code");

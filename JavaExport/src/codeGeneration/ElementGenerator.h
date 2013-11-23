@@ -47,7 +47,6 @@ namespace OOModel
 	class OOReference;
 	class StatementItem;
 	class StatementItemList;
-	class SwitchCase;
 }
 
 namespace JavaExport
@@ -69,7 +68,6 @@ public:
 	virtual CodeElement* generate(OOModel::Modifier* node) const;
 	virtual CodeElement* generate(OOModel::OOReference* node) const;
 	virtual CodeElement* generate(OOModel::StatementItemList* node) const;
-	virtual CodeElement* generate(OOModel::SwitchCase* node) const;
 
 };
 

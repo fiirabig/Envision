@@ -42,6 +42,7 @@ namespace OOModel
 	class Statement;
 	class SwitchStatement;
 	class TryCatchFinallyStatement;
+	class CaseStatement;
 }
 namespace JavaExport
 {
@@ -64,6 +65,7 @@ public:
 	virtual CodeElement* generate(OOModel::Statement* statement) const;
 	virtual CodeElement* generate(OOModel::SwitchStatement* statement) const;
 	virtual CodeElement* generate(OOModel::TryCatchFinallyStatement* statement) const;
+	virtual CodeElement* generate(OOModel::CaseStatement* statement) const;
 
 
 };

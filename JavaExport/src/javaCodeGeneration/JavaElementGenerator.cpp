@@ -36,7 +36,6 @@
 #include "OOModel/src/elements/Modifier.h"
 #include "OOModel/src/elements/OOReference.h"
 #include "OOModel/src/elements/StatementItemList.h"
-#include "OOModel/src/statements/SwitchCase.h"
 
 
 namespace JavaExport
@@ -79,7 +78,7 @@ CodeElement* JavaElementGenerator::generate(OOModel::Enumerator* enumerator) con
 
 CodeElement* JavaElementGenerator::generate(OOModel::FormalArgument* arg) const
 {
-	//TODO: ask Mitko
+
 //	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)
 
 	auto code = new Code(arg);
@@ -137,8 +136,6 @@ CodeElement* JavaElementGenerator::generate(OOModel::Modifier* modifier) const
 	}
 	if(modifier->isSet(OOModel::Modifier::Final))
 	{
-		//TODO: ask mitko
-		Q_ASSERT(false && "peep");
 		if(first) first = false; else *code << " ";
 		*code << ("final");
 	}
@@ -166,8 +163,7 @@ CodeElement* JavaElementGenerator::generate(OOModel::Modifier* modifier) const
 
 CodeElement* JavaElementGenerator::generate(OOModel::OOReference* ref) const
 {
-	//TODO: ask Mitko
-	return new CodeElement(ref->target());
+	return notAllowed(ref->target());
 }
 
 CodeElement* JavaElementGenerator::generate(OOModel::StatementItemList* items) const
@@ -177,15 +173,5 @@ CodeElement* JavaElementGenerator::generate(OOModel::StatementItemList* items) c
 	return code;
 }
 
-CodeElement* JavaElementGenerator::generate(OOModel::SwitchCase* scase) const
-{
-	//TODO: test
-	auto code = new Code(scase);
-	*code << "case " << scase->expr();
-	auto scope = new Scope(scase,ScopeLayout(":","",true,false,true,false,false));
-	*code << scope;
-	*scope << scase->statement();
-	return code;
-}
 
 } /* namespace JavaExport */

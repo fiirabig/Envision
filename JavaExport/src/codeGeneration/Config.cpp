@@ -6,8 +6,8 @@
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  ** following conditions are met:
  **
- **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
- **      disclaimer.
+ **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+ **      following disclaimer.
  **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  **      following disclaimer in the documentation and/or other materials provided with the distribution.
  **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
@@ -22,57 +22,27 @@
  ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
- ***********************************************************************************************************************/
+ **********************************************************************************************************************/
 
-#include "ModifierGenerator.h"
-#include "OOModel/src/elements/Modifier.h"
+#include "Config.h"
 
-namespace JavaExport
-{
+namespace JavaExport {
 
-ModifierGenerator::ModifierGenerator(Config config)
-:CodeElementGenerator(config)
+Config::Config(QString indentString, ScopeLayout curlyBraces, ScopeLayout parenthesis,
+		QString unimplementedString,QString notAllowedString_) :
+		indentString_(indentString),
+		curlyBracesLayout_(curlyBraces),
+		parenthesisLayout_(parenthesis),
+		languageName_(unimplementedString),
+		notAllowedString_(notAllowedString_)
 {
 	// TODO Auto-generated constructor stub
 }
 
-ModifierGenerator::~ModifierGenerator()
+Config::~Config()
 {
 	// TODO Auto-generated destructor stub
 }
 
-CodeElement* JavaExport::ModifierGenerator::generate(OOModel::Modifier* modifier) const
-{
-	auto code = new Code(modifier);
 
-	bool first = true;
-	if(modifier->isSet(OOModel::Modifier::Public))
-	{
-		if(first) first = false; else *code << " ";
-		*code << ("public");
-	}
-	first = true;
-	if(modifier->isSet(OOModel::Modifier::Private))
-	{
-		if(first) first = false; else *code << " ";
-		*code << ("private");
-	}
-	first = true;
-	if(modifier->isSet(OOModel::Modifier::Protected))
-	{
-		if(first) first = false; else *code << " ";
-		*code << ("protected");
-	}
-	first = true;
-	if(modifier->isSet(OOModel::Modifier::Static))
-	{
-		if(first) first = false; else *code << " ";
-		*code << ("static");
-	}
-
-	Q_ASSERT(false && "using modifierprinter this class needs to be removed!!");
-
-	return code;
-}
-
-}/* namespace JavaExport */
+} /* namespace JavaExport */

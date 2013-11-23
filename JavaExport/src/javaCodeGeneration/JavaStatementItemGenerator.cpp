@@ -40,6 +40,9 @@
 #include "OOModel/src/statements/Statement.h"
 #include "OOModel/src/statements/SwitchStatement.h"
 #include "OOModel/src/statements/TryCatchFinallyStatement.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/statements/CaseStatement.h"
+
 
 namespace JavaExport {
 
@@ -56,7 +59,8 @@ JavaStatementItemGenerator::~JavaStatementItemGenerator()
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::Block* statement) const
 {
-	//TODO: ask mitko
+	if(dynamic_cast<OOModel::StatementItemList*>(statement->items()))
+		return new CodeElement(statement->items());
 	return curlyBraces(statement,statement->items());
 }
 
@@ -79,7 +83,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::ContinueStatement* st
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::DeclarationStatement* decl) const
 {
-	//TODO: ask Mitko about ; newline
 	auto code = new Code(decl);
 	*code << decl->declaration() << ";" <<  new NewLine(decl);
 	return code;
@@ -88,8 +91,13 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::DeclarationStatement*
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::ExpressionStatement* expr) const
 {
-	//TODO: ask Mitko about ; newline
-//	return new CodeElement(expr->expression());
+	if(auto empty = dynamic_cast<OOModel::EmptyExpression*>(expr))
+	{
+		auto code = new Code(expr);
+		*code << new NewLine(empty) << new NewLine(empty);
+		return code;
+	}
+
 	auto code = new Code(expr);
 	*code << expr->expression() << ";" <<  new NewLine(expr);
 	return code;
@@ -99,7 +107,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::ExpressionStatement* 
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::ForEachStatement* forEach) const
 {
-	//TODO: ask Mitko about custom return
 	auto code = new Code(forEach);
 	*code << "for(" << forEach->varType() << " " << forEach->varName() << " : "
 		  << forEach->collection() << ")" << forEach->body();
@@ -119,10 +126,14 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::IfStatement* ifstmt) 
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::LoopStatement* loop) const
 {
-	//TODO: check if the ; are right && make sure to test empty init and update
+	//TODO: check if the ; are right && make sure to test empty init and update => while
 	auto code = new Code(loop);
+	if(!loop->initStep() && !loop->updateStep())
+		*code << "while(" << loop->condition() << ")";
+	else
 	*code << "for(" << loop->initStep() << ";" << loop->condition() << ";"
-		  << loop->updateStep() << ")" << loop->body();
+		  << loop->updateStep() << ")" ;
+	*code << loop->body();
 	return code;
 }
 
@@ -131,6 +142,7 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::LoopStatement* loop) 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::ReturnStatement* returnStmt) const
 {
 	auto code = new Code(returnStmt);
+	//TODO: allowedExactAmount(returnStmt->values(),1,"ReturnStatement", "Expression");
 	if(returnStmt->values()->size()>1)
 		*code << new NotAllowed(returnStmt->values(), "In Java return can have only one Expression");
 	else
@@ -148,16 +160,28 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::SwitchStatement* swit
 {
 	//TODO: test, dont forget with and without default
 	auto code = new Code(switchStmt);
-	*code << "switch" << parenthesis(switchStmt, switchStmt->switchVar())
-		  << curlyBraces(switchStmt,switchStmt->cases());
+	*code << "switch" << parenthesis(switchStmt, switchStmt->switchExpression()) << switchStmt->body();
 	return code;
 }
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::TryCatchFinallyStatement* stmt) const
 {
-	//todo: test, with/without finally, one or more catchClause...
+	//todo: test, with/without finally, one or more catchClause... only print finally if there
 	auto code = new Code(stmt);
-	*code << "try" << stmt->tryBody() << stmt->catchClauses() << "finally" << stmt->finallyBody();
+	*code << "try" << stmt->tryBody() << stmt->catchClauses() ;
+	if(stmt->finallyBody()->size())
+		*code << "finally" << stmt->finallyBody();
+	return code;
+}
+
+CodeElement* JavaStatementItemGenerator::generate(OOModel::CaseStatement* statement) const
+{
+	auto code = new Code(statement);
+	if(statement->caseExpression())
+		*code << "case " << statement->caseExpression() << ":";
+	else
+		*code << "default:";
+	*code << statement->body();
 	return code;
 }
 

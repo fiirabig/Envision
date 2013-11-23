@@ -9,27 +9,22 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -loointeraction
-HEADERS += src/javaCodeGeneration/JavaStatementItemGenerator.h \
+HEADERS += src/javaCodeGeneration/ExpressionGenerator.h \
+    src/javaCodeGeneration/JavaDeclarationGenerator.h \
+    src/codeGeneration/Config.h \
+    src/codeGeneration/DeclarationGenerator.h \
+    src/javaCodeGeneration/JavaStatementItemGenerator.h \
     src/codeGeneration/StatementItemGenerator.h \
     src/javaCodeGeneration/JavaElementGenerator.h \
     src/codeGeneration/ElementGenerator.h \
     src/javaCodeGeneration/JavaConfig.h \
     src/codeGeneration/ScopeLayout.h \
     src/codeGeneration/CodeElementGenerator.h \
-    src/codeGeneration/AbstractDeclarationGenerator.h \
-    src/javaCodeGeneration/declarationGenerators/JavaDeclarationGenerator.h \
-    src/javaCodeGeneration/expressionGenerators/ExpressionGenerator.h \
-    src/javaCodeGeneration/declarationGenerators/VariableDeclarationGenerator.h \
-    src/javaCodeGeneration/elementGenerators/ModifierGenerator.h \
-    src/javaCodeGeneration/declarationGenerators/ModuleGenerator.h \
-    src/javaCodeGeneration/declarationGenerators/ClassGenerator.h \
-    src/javaCodeGeneration/declarationGenerators/ProjectGenerator.h \
     src/javaCodeGeneration/JavaCodeGenerator.h \
     src/codeGeneration/CodeElement.h \
     src/codeGeneration/CodeGenerator.h \
     src/codeGeneration/FileController.h \
     src/codeGeneration/FileCreator.h \
-    src/codeGeneration/LayoutConfig.h \
     src/StatementPrinter.h \
     src/ExpressionPrinter.h \
     src/ModifierPrinter.h \
@@ -43,27 +38,22 @@ HEADERS += src/javaCodeGeneration/JavaStatementItemGenerator.h \
     src/javaexport_api.h \
     src/javaexport.h \
     src/ModulePrinter.h
-SOURCES += src/javaCodeGeneration/JavaStatementItemGenerator.cpp \
+SOURCES += src/javaCodeGeneration/ExpressionGenerator.cpp \
+    src/javaCodeGeneration/JavaDeclarationGenerator.cpp \
+    src/codeGeneration/Config.cpp \
+    src/codeGeneration/DeclarationGenerator.cpp \
+    src/javaCodeGeneration/JavaStatementItemGenerator.cpp \
     src/codeGeneration/StatementItemGenerator.cpp \
     src/javaCodeGeneration/JavaElementGenerator.cpp \
     src/codeGeneration/ElementGenerator.cpp \
     src/javaCodeGeneration/JavaConfig.cpp \
     src/codeGeneration/ScopeLayout.cpp \
     src/codeGeneration/CodeElementGenerator.cpp \
-    src/codeGeneration/AbstractDeclarationGenerator.cpp \
-    src/javaCodeGeneration/declarationGenerators/JavaDeclarationGenerator.cpp \
-    src/javaCodeGeneration/expressionGenerators/ExpressionGenerator.cpp \
-    src/javaCodeGeneration/declarationGenerators/VariableDeclarationGenerator.cpp \
-    src/javaCodeGeneration/elementGenerators/ModifierGenerator.cpp \
-    src/javaCodeGeneration/declarationGenerators/ModuleGenerator.cpp \
-    src/javaCodeGeneration/declarationGenerators/ClassGenerator.cpp \
-    src/javaCodeGeneration/declarationGenerators/ProjectGenerator.cpp \
     src/javaCodeGeneration/JavaCodeGenerator.cpp \
     src/codeGeneration/CodeElement.cpp \
     src/codeGeneration/CodeGenerator.cpp \
     src/codeGeneration/FileController.cpp \
     src/codeGeneration/FileCreator.cpp \
-    src/codeGeneration/LayoutConfig.cpp \
     src/StatementPrinter.cpp \
     src/ExpressionPrinter.cpp \
     src/ModifierPrinter.cpp \

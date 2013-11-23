@@ -32,9 +32,9 @@ namespace JavaExport
 Config javaConfig()
 {
 	return Config("   ", //IndentString
-		ScopeLayout(" {", "}", true, false, true, true, true), //curlyBraces
+		ScopeLayout(" {", "}", true, false, true, false, true), //curlyBraces
 		ScopeLayout("(", ")", false,false,false,false,false), //parenthese
-		"Java", //unimplemented String => language
+		"Java", //language
 		"has no representation in Java" //
 		);
 }

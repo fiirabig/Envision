@@ -39,6 +39,8 @@
 #include "OOModel/src/statements/Statement.h"
 #include "OOModel/src/statements/SwitchStatement.h"
 #include "OOModel/src/statements/TryCatchFinallyStatement.h"
+#include "OOModel/src/statements/CaseStatement.h"
+
 
 namespace JavaExport
 {
@@ -77,6 +79,8 @@ CodeElement* StatementItemGenerator::generate(OOModel::StatementItem* statement)
 	else if(auto stmt = dynamic_cast<OOModel::SwitchStatement*>(statement))
 		return generate(stmt);
 	else if(auto stmt = dynamic_cast<OOModel::TryCatchFinallyStatement*>(statement))
+		return generate(stmt);
+	else if(auto stmt = dynamic_cast<OOModel::CaseStatement*>(statement))
 		return generate(stmt);
 	else if(auto stmt = dynamic_cast<OOModel::Statement*>(statement))
 		return generate(stmt);
@@ -143,6 +147,11 @@ CodeElement* StatementItemGenerator::generate(OOModel::SwitchStatement* statemen
 }
 
 CodeElement* StatementItemGenerator::generate(OOModel::TryCatchFinallyStatement* statement) const
+{
+	return unimplemented(statement);
+}
+
+CodeElement* StatementItemGenerator::generate(OOModel::CaseStatement* statement) const
 {
 	return unimplemented(statement);
 }

@@ -29,9 +29,9 @@
 #include "codeGeneration/CodeGenerator.h"
 #include "JavaConfig.h"
 
-#include "declarationGenerators/JavaDeclarationGenerator.h"
+#include "javaCodeGeneration/JavaDeclarationGenerator.h"
 #include "javaCodeGeneration/JavaStatementItemGenerator.h"
-#include "expressionGenerators/ExpressionGenerator.h"
+#include "javaCodeGeneration/ExpressionGenerator.h"
 #include "javaCodeGeneration/JavaElementGenerator.h"
 
 

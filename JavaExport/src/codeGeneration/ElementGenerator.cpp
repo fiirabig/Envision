@@ -38,8 +38,6 @@
 #include "OOModel/src/elements/Modifier.h"
 #include "OOModel/src/elements/OOReference.h"
 #include "OOModel/src/elements/StatementItemList.h"
-#include "OOModel/src/statements/SwitchCase.h"
-
 
 
 namespace JavaExport
@@ -80,8 +78,8 @@ CodeElement* ElementGenerator::generate(Model::Node* node) const
 		return generate(modifier);
 	else if(auto oOReference = dynamic_cast<OOModel::OOReference*>(node))
 		return generate(oOReference);
-	else if(auto scase = dynamic_cast<OOModel::SwitchCase*>(node))
-		return generate(scase);
+//	else if(auto scase = dynamic_cast<OOModel::SwitchCase*>(node))
+//		return generate(scase);
 
 	return unimplemented(node);
 
@@ -141,9 +139,9 @@ CodeElement* ElementGenerator::generate(OOModel::StatementItemList* node) const
 	return unimplemented(node);
 }
 
-CodeElement* ElementGenerator::generate(OOModel::SwitchCase* node) const
-{
-	return unimplemented(node);
-}
+//CodeElement* ElementGenerator::generate(OOModel::SwitchCase* node) const
+//{
+//	return unimplemented(node);
+//}
 
 } /* namespace JavaExport */

@@ -24,36 +24,44 @@
  **
  ***********************************************************************************************************************/
 
-#include "VariableDeclarationGenerator.h"
-#include "OOModel/src/declarations/VariableDeclaration.h"
+#pragma once
+#include "codeGeneration/DeclarationGenerator.h"
+#include "javaCodeGeneration/JavaConfig.h"
+
+namespace OOModel
+{
+	class Declaration;
+	class Class;
+	class Field;
+	class Method;
+	class Module;
+	class NameImport;
+	class Project;
+	class TypeAlias;
+	class VariableDeclaration;
+	class FormalTypeArgument;
+	class ExplicitTemplateInstantiation;
+}
 
 namespace JavaExport
 {
 
-VariableDeclarationGenerator::VariableDeclarationGenerator(Config config)
-: CodeElementGenerator(config)
+class JavaDeclarationGenerator: public DeclarationGenerator
 {
-	// TODO Auto-generated constructor stub
-}
+public:
+	JavaDeclarationGenerator();
+	virtual ~JavaDeclarationGenerator();
+	virtual CodeElement* generate(OOModel::Class* declaration) const override;
+	virtual CodeElement* generate(OOModel::ExplicitTemplateInstantiation* declaration) const override;
+	virtual CodeElement* generate(OOModel::Field* declaration) const override;
+	virtual CodeElement* generate(OOModel::Method* declaration) const override;
+	virtual CodeElement* generate(OOModel::Module* declaration) const override;
+	virtual CodeElement* generate(OOModel::NameImport* declaration) const override;
+	virtual CodeElement* generate(OOModel::Project* declaration) const override;
+	virtual CodeElement* generate(OOModel::TypeAlias* declaration) const override;
+	virtual CodeElement* generate(OOModel::VariableDeclaration* declaration) const override;
 
-VariableDeclarationGenerator::~VariableDeclarationGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
+};
 
-CodeElement* VariableDeclarationGenerator::generate(OOModel::VariableDeclaration* decl) const
-{
-	auto code = new Code(decl);
-	*code << decl->modifiers()  << decl->typeExpression() << " " << decl->name();
-
-	if(auto initValue = decl->initialValue())
-	{
-		*code << (" = ") << initValue;
-	}
-
-	*code << ";" << new NewLine(decl);
-	return code;
-
-}
 
 } /* namespace JavaExport */

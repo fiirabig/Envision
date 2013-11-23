@@ -25,7 +25,7 @@
  ***********************************************************************************************************************/
 
 #pragma once
-#include "codeGeneration/LayoutConfig.h"
+#include "codeGeneration/Config.h"
 
 namespace JavaExport
 {

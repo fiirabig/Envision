@@ -119,21 +119,21 @@ void StatementPrinter::printStatement(OOModel::StatementItem* statement)
 		//TODO multiple return values?
 		Q_ASSERT(false && returnStatement);
 
-	} else if(auto switchCase = dynamic_cast<SwitchCase*>(statement)) {
-		if(verbose) qDebug() << "statement is SwitchCase";
-		//TODO
-		Q_ASSERT(false && switchCase);
+//	} else if(auto switchCase = dynamic_cast<SwitchCase*>(statement)) {
+//		if(verbose) qDebug() << "statement is SwitchCase";
+//		//TODO
+//		Q_ASSERT(false && switchCase);
 
 	} else if(auto switchStatement = dynamic_cast<SwitchStatement*>(statement)) {
 		if(verbose) qDebug() << "statement is SwitchStatement";
 		printer_.print("switch(");
-		expressionPrinter_->print(switchStatement->switchVar());
+		//expressionPrinter_->print(switchStatement->switchVar());
 		printer_.print(") {");
 		printer_.printNewLineAndIndent(SourcePrinter::IncrementIndent);
-		for(auto switchCase: *switchStatement->cases()) {
-			//print(switchCase);
-			qDebug() << "printing swichtCase" << switchCase;
-		}
+//		for(auto switchCase: *switchStatement->cases()) {
+//			//print(switchCase);
+//			qDebug() << "printing swichtCase" << switchCase;
+//		}
 		printer_.printNewLineAndIndent(SourcePrinter::DecrementIndent);
 		printer_.print("}");
 		printer_.printNewLineAndIndent();

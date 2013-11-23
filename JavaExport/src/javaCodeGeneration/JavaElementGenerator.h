@@ -44,7 +44,7 @@ public:
 	virtual CodeElement* generate(OOModel::Modifier* node) const override;
 	virtual CodeElement* generate(OOModel::OOReference* node) const override;
 	virtual CodeElement* generate(OOModel::StatementItemList* node) const override;
-	virtual CodeElement* generate(OOModel::SwitchCase* scase) const override;
+//	virtual CodeElement* generate(OOModel::SwitchCase* scase) const override;
 
 
 };

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
-#include "LayoutConfig.h"
+#include "Config.h"
 #include "FileController.h"
 #include <QDir>
 #include "ModelBase/src/nodes/Node.h"
@@ -298,6 +298,7 @@ public:
 		return "Can't create source code for node " + ownerToString() + " because " + Error::message();
 	}
 };
+
 
 
 

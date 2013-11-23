@@ -32,11 +32,7 @@ using namespace OOModel;
 namespace JavaExport
 {
 
-ExpressionGenerator::ExpressionGenerator(Config config)
-: CodeElementGenerator(config)
-{
-	// TODO Auto-generated constructor stub
-}
+ExpressionGenerator::ExpressionGenerator(Config config): CodeElementGenerator(config) {}
 
 ExpressionGenerator::~ExpressionGenerator()
 {
@@ -71,7 +67,9 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		*code << "\"" << stringLiteral->value() << "\"";
 
 	else if(auto arrayTypeExpression = dynamic_cast<ArrayTypeExpression*>(expr))
-			//TODO: Ask Mitko how arrays are supposed to be
+	//TODO: Ask Mitko how arrays are supposed to be
+		//if(expr->fixedSize()) *code << notAllowed(expr->fixedSize());
+		//TODO: change not allowed so it ignores nullptrs
 		*code << arrayTypeExpression->typeExpression() << "[]";
 
 	else if(auto classTypeExpression = dynamic_cast<ClassTypeExpression*>(expr))
@@ -107,10 +105,11 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		Q_ASSERT(false && referenceTypeExpression); //TODO:
 
 	else if(auto typeQualifierExpression = dynamic_cast<TypeQualifierExpression*>(expr))
-		Q_ASSERT(false && typeQualifierExpression);	//TODO:
+		Q_ASSERT(false && typeQualifierExpression);	//TODO: volatile const
 
 	else if(auto arrayInitializer = dynamic_cast<ArrayInitializer*>(expr))
 	{
+		//TODO: test
 		*code << " {";
 		bool first = true;
 		for(auto element : *arrayInitializer->values()) {
@@ -182,20 +181,16 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 				*code << unaryOperation->operand() << "++" ; break;
 			case UnaryOperation::PLUS :
 				*code << "+" << unaryOperation->operand(); break;
-				//TODO: parenthesis?
 				break;
 			case UnaryOperation::MINUS :
 				*code << "-" << unaryOperation->operand(); break;
-				//TODO: parenthesis?
 			case UnaryOperation::NOT :
 				*code << "!" << unaryOperation->operand(); break;
-				//TODO: parenthesis?
 			case UnaryOperation::PARENTHESIS :
 				*code << "(" << unaryOperation->operand() << ")"; break;
-				//TODO: parenthesis?
 			case UnaryOperation::ADDRESSOF : //TODO: add error
 			case UnaryOperation::DEREFERENCE :
-			case UnaryOperation::COMPLEMENT :
+			case UnaryOperation::COMPLEMENT : //tODO: google
 			default : Q_ASSERT(false && "switch on UnaryOperator");
 		}
 	}
@@ -205,7 +200,6 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 
 	else if(auto referenceExpression = dynamic_cast<ReferenceExpression*>(expr))
 	{
-		//TODO: ask mitko if this is ok
 		if(auto prefix = referenceExpression->prefix())
 			*code << prefix << ".";
 
@@ -262,16 +256,14 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 			case AssignmentExpression::REMAINDER_ASSIGN: *code << " %= "; break;
 			case AssignmentExpression::LEFT_SHIFT_ASSIGN: *code << " <<= "; break;
 			case AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: *code << " >>= "; break;
-
-			//TODO:
-			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: Q_ASSERT(false); break; //TODO: add error
+			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: *code << " >>>= "; break;
 			default : Q_ASSERT(false && assignmentExpression->op());
 
 		}
 		*code << assignmentExpression->right();
 	}
-	else if(auto emptyExpression = dynamic_cast<EmptyExpression*>(expr))
-		return new NewLine(emptyExpression);
+	else if(dynamic_cast<EmptyExpression*>(expr))
+		return new CodeElement(nullptr);
 	else if(auto throwExpr = dynamic_cast<ThrowExpression*>(expr))
 	{
 		auto code = new Code(throwExpr);
