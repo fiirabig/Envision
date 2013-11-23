@@ -47,15 +47,8 @@
 namespace JavaExport {
 
 JavaStatementItemGenerator::JavaStatementItemGenerator() :
-		StatementItemGenerator(javaConfig())
-{
-	// TODO Auto-generated constructor stub
-}
+		StatementItemGenerator(javaConfig()){}
 
-JavaStatementItemGenerator::~JavaStatementItemGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::Block* statement) const
 {
@@ -117,6 +110,7 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::ForEachStatement* for
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::IfStatement* ifstmt) const
 {
+	//TODO: check if braces are ok with multi line then and else Branch
 	auto code = new Code(ifstmt);
 	*code << "if(" << ifstmt->condition() << ")" << ifstmt->thenBranch();
 	if(ifstmt->elseBranch()) *code << "else" << ifstmt->elseBranch();
@@ -142,9 +136,8 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::LoopStatement* loop) 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::ReturnStatement* returnStmt) const
 {
 	auto code = new Code(returnStmt);
-	//TODO: allowedExactAmount(returnStmt->values(),1,"ReturnStatement", "Expression");
 	if(returnStmt->values()->size()>1)
-		*code << new NotAllowed(returnStmt->values(), "In Java return can have only one Expression");
+		*code << notAllowed(returnStmt->values());
 	else
 		*code << "return " << returnStmt->values() << ";";
 	return code;
@@ -166,7 +159,7 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::SwitchStatement* swit
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::TryCatchFinallyStatement* stmt) const
 {
-	//todo: test, with/without finally, one or more catchClause... only print finally if there
+	//todo: test, with/without finally, one or more catchClause...
 	auto code = new Code(stmt);
 	*code << "try" << stmt->tryBody() << stmt->catchClauses() ;
 	if(stmt->finallyBody()->size())

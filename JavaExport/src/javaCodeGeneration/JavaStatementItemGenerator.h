@@ -32,7 +32,6 @@ namespace JavaExport {
 class JavaStatementItemGenerator: public StatementItemGenerator {
 public:
 	JavaStatementItemGenerator();
-	virtual ~JavaStatementItemGenerator();
 
 	virtual CodeElement* generate(OOModel::Block* statement) const override;
 	virtual CodeElement* generate(OOModel::BreakStatement* statement) const override;
