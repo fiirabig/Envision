@@ -27,7 +27,6 @@
 #pragma once
 #include "Config.h"
 #include "FileController.h"
-#include <QDir>
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/List.h"
 
@@ -206,22 +205,46 @@ public:
 	Sequence(Model::List* owner, QString first, QString separator, QString last)
 		:CodeElementContainer(owner)
 	{
-		init(first,separator,last);
+		if(owner->size())
+		{
+			*this << first;
+			bool firstelem = true;
+				for(auto elem : *owner)
+				{
+					if(firstelem) firstelem = false;
+					else *this << separator;
+					*this << elem;
+				}
+			*this << last;
+		}
 	}
 	Sequence(Model::List* owner, QString first, QString last)
 		:CodeElementContainer(owner)
 	{
-		init(first,"",last);
+		if(owner->size())
+		{
+			*this << first;
+			for(auto elem : *owner)
+				*this << elem;
+			*this << last;
+		}
 	}
 	Sequence(Model::List* owner, QString separator )
 		:CodeElementContainer(owner)
 	{
-		init("",separator,"");
+		bool first = true;
+		for(auto elem : *owner)
+		{
+			if(first) first = false;
+			else *this << separator;
+			*this << elem;
+		}
 	}
 	Sequence(Model::List* owner)
 		:CodeElementContainer(owner)
 	{
-		init("","","");
+		for(auto elem : *owner)
+			*this << elem;
 	}
 
 	virtual const QString toString() override
@@ -229,23 +252,6 @@ public:
 		return "List(" + CodeElementContainer::toString() + ")";
 	}
 
-private:
-	void init(QString first, QString separator, QString last)
-	{
-		bool firstElem = true;
-		auto list = dynamic_cast<Model::List*>(owner());
-		for(auto node : *list)
-		{
-			if(firstElem)
-			{
-				firstElem = false;
-				*this << first;
-			}
-			else *this << separator;
-			*this << node;
-		}
-		if(!firstElem) *this << last;
-	}
 };
 
 class NewLine : public CodeElement

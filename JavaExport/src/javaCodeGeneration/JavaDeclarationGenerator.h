@@ -50,7 +50,6 @@ class JavaDeclarationGenerator: public DeclarationGenerator
 {
 public:
 	JavaDeclarationGenerator();
-	virtual ~JavaDeclarationGenerator();
 	virtual CodeElement* generate(OOModel::Class* declaration) const override;
 	virtual CodeElement* generate(OOModel::ExplicitTemplateInstantiation* declaration) const override;
 	virtual CodeElement* generate(OOModel::Field* declaration) const override;

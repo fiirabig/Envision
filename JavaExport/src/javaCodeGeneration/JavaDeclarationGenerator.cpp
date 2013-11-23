@@ -38,15 +38,7 @@ namespace JavaExport
 {
 
 
-JavaDeclarationGenerator::JavaDeclarationGenerator() : DeclarationGenerator(javaConfig())
-{
-	// TODO Auto-generated constructor stub
-}
-
-JavaDeclarationGenerator::~JavaDeclarationGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
+JavaDeclarationGenerator::JavaDeclarationGenerator() : DeclarationGenerator(javaConfig()){}
 
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::Field* field) const
@@ -144,8 +136,8 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Module* module) const
 	for(auto m : *module->modules())
 		*dir << m;
 
-	*dir << allowedWithExactAmount(module->methods(), 0, "module", "methods");
-	*dir << allowedWithExactAmount(module->fields(), 0, "module", "fields");
+	*dir << notAllowed(module->methods());
+	*dir << notAllowed(module->fields());
 
 	*dir << new Ignore(module->libraries());
 
@@ -172,7 +164,7 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) con
 	if(import->modifiers())
 		*code << new NotAllowed(import,"in Java imports don't have modifiers");
 
-	*code << allowedWithExactAmount(import->subDeclarations(), 0, "import", "subDeclarations");
+	*code << notAllowed(import->subDeclarations());
 
 	return code;
 }
@@ -198,20 +190,16 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Project* project) const
 			//TODO: add package and imports
 		}
 
-		for(auto p : *project->projects())
-			*dir << p;
+		*dir << project->projects();
+		*dir << project->modules();
 
-		for(auto module : *project->modules())
-			*dir << module;
-
-		*dir << allowedWithExactAmount(project->methods(),0,"project", "methods");
+		*dir << notAllowed(project->methods());
 
 		return dir;
 }
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::TypeAlias* alias) const
 {
-	//TODO: ask Mitko
 	return notAllowed(alias);
 }
 

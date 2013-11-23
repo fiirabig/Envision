@@ -48,28 +48,6 @@ public:
 	Scope* parenthesis(Model::Node* node, Model::Node* content) const;
 	Unimplemented* unimplemented(Model::Node* node) const;
 	CodeElement* notAllowed(Model::Node* node) const;
-	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString first, QString separator, QString last) const;
-	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString first, QString last) const;
-	CodeElement* allowedWithExactAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString separator) const;
-	CodeElement* allowedWithExactAmount(Model::List* list, int amount, QString parentName, QString childName) const;
-	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount, QString parentName, QString childName,
-			QString first, QString separator, QString last) const;
-	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString first, QString last) const;
-	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString separator) const;
-	CodeElement* allowedWithMinimumAmount(Model::List* list, int amount, QString parentName, QString childName) const;
-	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount,QString parentName, QString childName,
-			QString first, QString separator, QString last) const;
-	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount, QString parentName, QString childName,
-			QString first, QString last) const;
-	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount, QString parentName, QString childName,
-			QString separator) const;
-	CodeElement* allowedWithMaximumAmount(Model::List* list, int amount,QString parentName, QString childName) const;
-
 
 private:
 	Config config_;

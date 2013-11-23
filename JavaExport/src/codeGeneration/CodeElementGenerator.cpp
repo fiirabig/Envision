@@ -32,15 +32,9 @@
 namespace JavaExport
 {
 
-CodeElementGenerator::CodeElementGenerator(Config config) : config_(config)
-{
-	// TODO Auto-generated constructor stub
+CodeElementGenerator::CodeElementGenerator(Config config) : config_(config){}
 
-}
-
-CodeElementGenerator::~CodeElementGenerator() {
-	// TODO Auto-generated destructor stub
-}
+CodeElementGenerator::~CodeElementGenerator() {}
 
 Scope* CodeElementGenerator::curlyBraces(Model::Node* node, Model::Node* content) const
 {
@@ -60,106 +54,107 @@ Scope* CodeElementGenerator::parenthesis(Model::Node* node) const
 	auto scope = new Scope(node,config_.parentheses());
 	return scope;
 }
+
 Scope* CodeElementGenerator::parenthesis(Model::Node* node, Model::Node* content) const
 {
 	auto scope = parenthesis(node);
 	*scope << content;
 	return scope;
 }
-
-CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString separator, QString last) const
-{
-	if(list->size() == amount)
-		return new Sequence(list,first,separator,last);
-	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have exactly "
-			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
-			+ QString::number(list->size()));
-}
-
-CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString last) const
-{
-	return allowedWithExactAmount(list, amount, parentName, childName, first, "", last);
-}
-
-CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
-		int amount, QString parentName, QString childName,
-		QString separator) const
-{
-	return allowedWithExactAmount(list, amount, parentName, childName, "", separator, "");
-}
-
-CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
-		int amount, QString parentName, QString childName) const
-{
-	return allowedWithExactAmount(list, amount, parentName, childName, "", "", "");
-
-}
-
-CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString separator, QString last) const
-{
-	if(list->size() <= amount)
-		return new Sequence(list,first,separator,last);
-	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have at least "
-			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
-			+ QString::number(list->size()));
-}
-
-CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString last) const
-{
-	return allowedWithMinimumAmount(list, amount, parentName, childName, first, "", last);
-}
-
-CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
-		int amount, QString parentName, QString childName,
-		QString separator) const
-{
-	return allowedWithMinimumAmount(list, amount, parentName, childName, "", separator, "");
-
-}
-
-CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
-		int amount, QString parentName, QString childName) const
-{
-	return allowedWithMinimumAmount(list, amount, parentName, childName, "", "", "");
-}
-
-CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString separator, QString last) const
-{
-	if(list->size() >= amount)
-		return new Sequence(list,first,separator,last);
-	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have at most  "
-			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
-			+ QString::number(list->size()));
-}
-
-CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
-		int amount, QString parentName, QString childName, QString first,
-		QString last) const
-{
-	return allowedWithMaximumAmount(list, amount, parentName, childName, first, "", last);
-}
-
-CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
-		int amount, QString parentName, QString childName,
-		QString separator) const
-{
-	return allowedWithMaximumAmount(list, amount, parentName, childName, "", separator, "");
-}
-
-CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
-		int amount, QString parentName, QString childName) const
-{
-	return allowedWithMaximumAmount(list, amount, parentName, childName, "", "", "");
-}
+//
+//CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString separator, QString last) const
+//{
+//	if(list->size() == amount)
+//		return new Sequence(list,first,separator,last);
+//	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have exactly "
+//			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
+//			+ QString::number(list->size()));
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString last) const
+//{
+//	return allowedWithExactAmount(list, amount, parentName, childName, first, "", last);
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
+//		int amount, QString parentName, QString childName,
+//		QString separator) const
+//{
+//	return allowedWithExactAmount(list, amount, parentName, childName, "", separator, "");
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithExactAmount(Model::List* list,
+//		int amount, QString parentName, QString childName) const
+//{
+//	return allowedWithExactAmount(list, amount, parentName, childName, "", "", "");
+//
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString separator, QString last) const
+//{
+//	if(list->size() <= amount)
+//		return new Sequence(list,first,separator,last);
+//	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have at least "
+//			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
+//			+ QString::number(list->size()));
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString last) const
+//{
+//	return allowedWithMinimumAmount(list, amount, parentName, childName, first, "", last);
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName,
+//		QString separator) const
+//{
+//	return allowedWithMinimumAmount(list, amount, parentName, childName, "", separator, "");
+//
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMinimumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName) const
+//{
+//	return allowedWithMinimumAmount(list, amount, parentName, childName, "", "", "");
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString separator, QString last) const
+//{
+//	if(list->size() >= amount)
+//		return new Sequence(list,first,separator,last);
+//	return new NotAllowed(list,"in " + config_.languageName() + " a " + parentName + " must have at most  "
+//			+ QString::number(amount) + " " + childName + ". This " + parentName + " has "
+//			+ QString::number(list->size()));
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName, QString first,
+//		QString last) const
+//{
+//	return allowedWithMaximumAmount(list, amount, parentName, childName, first, "", last);
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName,
+//		QString separator) const
+//{
+//	return allowedWithMaximumAmount(list, amount, parentName, childName, "", separator, "");
+//}
+//
+//CodeElement* CodeElementGenerator::allowedWithMaximumAmount(Model::List* list,
+//		int amount, QString parentName, QString childName) const
+//{
+//	return allowedWithMaximumAmount(list, amount, parentName, childName, "", "", "");
+//}
 
 } /* namespace JavaExport */
