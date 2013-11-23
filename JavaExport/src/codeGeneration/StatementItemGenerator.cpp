@@ -46,15 +46,7 @@ namespace JavaExport
 {
 
 StatementItemGenerator::StatementItemGenerator(Config config)
-: CodeElementGenerator(config)
-{
-	// TODO Auto-generated constructor stub
-}
-
-StatementItemGenerator::~StatementItemGenerator()
-{
-	// TODO Auto-generated destructor stub
-}
+: CodeElementGenerator(config) {}
 
 CodeElement* StatementItemGenerator::generate(OOModel::StatementItem* statement) const
 {

@@ -51,7 +51,6 @@ class StatementItemGenerator: public CodeElementGenerator
 {
 public:
 	StatementItemGenerator(Config config);
-	virtual ~StatementItemGenerator();
 	CodeElement* generate(OOModel::StatementItem* statement) const;
 	virtual CodeElement* generate(OOModel::Block* statement) const;
 	virtual CodeElement* generate(OOModel::BreakStatement* statement) const;
