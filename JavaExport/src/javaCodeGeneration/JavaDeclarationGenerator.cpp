@@ -48,7 +48,7 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Field* field) const
 	*code << notAllowed(field->subDeclarations());
 	*code << annotations(field->annotations());
 	*code << generate(dynamic_cast<OOModel::VariableDeclaration*>(field))
-		  << ";" << new NewLine(field);
+				  << ";" << new NewLine(field);
 	return code;
 }
 
@@ -66,15 +66,15 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Method* method) const
 
 	switch(method->methodKind())
 	{
-		case OOModel::Method::MethodKind::Default :
-			//No check here, because for Java behavior is ok if this isn't set correctly for Constructor
-			break;
-		case OOModel::Method::MethodKind::Constructor :
-			if(method->results()->size() == 0) break;
-		case OOModel::Method::MethodKind::Destructor :
-		case OOModel::Method::MethodKind::Conversion :
-		default :
-			*code << notAllowed(method->results());
+	case OOModel::Method::MethodKind::Default :
+		//No check here, because for Java behavior is ok if this isn't set correctly for Constructor
+		break;
+	case OOModel::Method::MethodKind::Constructor :
+		if(method->results()->size() == 0) break;
+	case OOModel::Method::MethodKind::Destructor :
+	case OOModel::Method::MethodKind::Conversion :
+	default :
+		*code << notAllowed(method->results());
 	}
 
 	*code << method->name() << "(" << new Sequence(method->arguments(),", ") << ")";
@@ -129,31 +129,21 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) con
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::Project* project) const
 {
-	//Ignore subdeclaration -> import java lang
-	/*//TODO: ask mitko
-	 *	ATTRIBUTE_OOP_NAME_SYMBOL
-	ATTRIBUTE(Modifier, modifiers, setModifiers)
-	ATTRIBUTE_OOP_ANNOTATIONS
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
-	 */
-	qDebug() << "generating project " << project->name();
-		auto dir = new SourceDirectory(project,project->name());
+	auto dir = new SourceDirectory(project,project->name());
 
-		//TODO: move to method
-		for(auto c : *project->classes())
-		{
-			auto file = new SourceFile(c,c->name(),"java");
-			*file << c;
-			*dir << file;
-			//TODO: add package and imports
-		}
+	for(auto c : *project->classes())
+		*dir << topLevelClass(c);
+	*dir << new Ignore(project->classes());
 
-		*dir << project->projects();
-		*dir << project->modules();
+	*dir << project->projects();
+	*dir << project->modules();
 
-		*dir << notAllowed(project->methods());
+	*dir << notAllowed(project->annotations());
+	*dir << notAllowed(project->methods());
+	*dir << notAllowed(project->modifiers());
+	*dir << new Ignore(project->subDeclarations());
 
-		return dir;
+	return dir;
 }
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::TypeAlias* alias) const
@@ -190,53 +180,53 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Class* c) const
 
 			ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)//TODO: ask mitko about interfaces
 			PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int) //TODO: ask mikto
-		*/
+	 */
 
-			auto code = new Code(c);
+	auto code = new Code(c);
 
-			auto classHeader = new Code(c);
-			*code << classHeader;
-			*classHeader << c->modifiers() << " class " << c->name();
+	auto classHeader = new Code(c);
+	*code << classHeader;
+	*classHeader << c->modifiers() << " class " << c->name();
 
-			*classHeader << new Sequence(c->typeArguments(),"<",", ",">");
+	*classHeader << new Sequence(c->typeArguments(),"<",", ",">");
 
-			bool first = true;
-			bool second = true;
-			*classHeader << new Ignore(c->baseClasses());
-			//TODO: check with mitko
-			//cant extend on enum
-			for(auto base :*c->baseClasses())
-			{
-				if(first)
-				{
-					//if name is object dont print it
-					//if interface also implements
-					*code << " extends " << base;
-					first = false;
-				}
-				else if(second)
-				{
-					*code << " implements " << base;
-					second = false;
-				}
-				else
-					*code << " ," << base;
-			}
+	bool first = true;
+	bool second = true;
+	*classHeader << new Ignore(c->baseClasses());
+	//TODO: check with mitko
+	//cant extend on enum
+	for(auto base :*c->baseClasses())
+	{
+		if(first)
+		{
+			//if name is object dont print it
+			//if interface also implements
+			*code << " extends " << base;
+			first = false;
+		}
+		else if(second)
+		{
+			*code << " implements " << base;
+			second = false;
+		}
+		else
+			*code << " ," << base;
+	}
 
-			auto body = curlyBraces(c);
-			*code << body;
-			*body << c->classes()  << c->enumerators() << c->fields() << c->methods();
+	auto body = curlyBraces(c);
+	*code << body;
+	*body << c->classes()  << c->enumerators() << c->fields() << c->methods();
 
-			//TODO: enum... testcases check for completeness...
+	//TODO: enum... testcases check for completeness...
 
-			//TODO: check with mitko
-			//Illegal in Java
-			if(c->friends()->size())
-				*code << new NotAllowed(c->friends(),"in Java there is no concept of friends");
-			else
-				*code << new Ignore(c->friends());
+	//TODO: check with mitko
+	//Illegal in Java
+	if(c->friends()->size())
+		*code << new NotAllowed(c->friends(),"in Java there is no concept of friends");
+	else
+		*code << new Ignore(c->friends());
 
-			return code;
+	return code;
 }
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::ExplicitTemplateInstantiation* declaration) const
