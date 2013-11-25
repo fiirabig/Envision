@@ -218,8 +218,25 @@ public:
 			*this << last;
 		}
 	}
-	Sequence(Model::List* owner, QString first, QString last)
+
+	Sequence(Model::List* owner, CodeElement* first, CodeElement* separator, CodeElement* last)
 		:CodeElementContainer(owner)
+	{
+		if(owner->size())
+		{
+			*this << first;
+			bool firstelem = true;
+				for(auto elem : *owner)
+				{
+					if(firstelem) firstelem = false;
+					else *this << separator;
+					*this << elem;
+				}
+			*this << last;
+		}
+	}
+
+	Sequence(Model::List* owner, QString first, QString last) :CodeElementContainer(owner)
 	{
 		if(owner->size())
 		{
@@ -229,8 +246,18 @@ public:
 			*this << last;
 		}
 	}
-	Sequence(Model::List* owner, QString separator )
-		:CodeElementContainer(owner)
+
+	Sequence(Model::List* owner, CodeElement* first, CodeElement* last) :CodeElementContainer(owner)
+	{
+		if(owner->size())
+		{
+			*this << first;
+			for(auto elem : *owner)
+				*this << elem;
+			*this << last;
+		}
+	}
+	Sequence(Model::List* owner, QString separator) :CodeElementContainer(owner)
 	{
 		bool first = true;
 		for(auto elem : *owner)
@@ -240,8 +267,17 @@ public:
 			*this << elem;
 		}
 	}
-	Sequence(Model::List* owner)
-		:CodeElementContainer(owner)
+	Sequence(Model::List* owner, CodeElement* separator) :CodeElementContainer(owner)
+	{
+		bool first = true;
+		for(auto elem : *owner)
+		{
+			if(first) first = false;
+			else *this << separator;
+			*this << elem;
+		}
+	}
+	Sequence(Model::List* owner) :CodeElementContainer(owner)
 	{
 		for(auto elem : *owner)
 			*this << elem;

@@ -86,27 +86,15 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Method* method) const
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::Module* module) const
 {
-
-	/*
-	 * //TODO: ask mitko
-	 ATTRIBUTE_OOP_NAME_SYMBOL
-	 ATTRIBUTE(Modifier, modifiers, setModifiers)
-	 ATTRIBUTE_OOP_ANNOTATIONS
-	 ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
-	 */
-
-	//qDebug() << "generating module " << module->name();
-
 	SourceDirectory* dir = new SourceDirectory(module,module->name());
 
-	//TODO: move to method addTopLevelClass(CodeElementContainer*, TypedList<Classes>)
+	*dir << new Ignore(module->modifiers()); //TODO:
+
+	*dir << notAllowed(module->annotations());
+	*dir << notAllowed(module->subDeclarations());
+
 	for(auto c : *module->classes())
-	{
-		auto file = new SourceFile(c,c->name(),"java");
-		*dir << file;
-		*file << c;
-		//TODO: add package and import
-	}
+		*dir << topLevelClass(c);
 	*dir << new Ignore(module->classes());
 
 	*dir << module->modules();
@@ -136,10 +124,11 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) con
 	*/
 
 	auto code = new Code(import);
-	*code << import->importedName();
+	*code << "import " << import->importedName() << new NewLine(import);
 
-	if(import->modifiers())
-		*code << new NotAllowed(import,"in Java imports don't have modifiers");
+	//TODO:
+//	if(import->modifiers())
+//		*code << new NotAllowed(import,"in Java imports don't have modifiers");
 
 	*code << notAllowed(import->subDeclarations());
 
@@ -267,14 +256,17 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::ExplicitTemplateInstant
 CodeElement* JavaDeclarationGenerator::annotations(OOModel::StatementItemList* annotations) const
 {
 	//TODO: check with Mitko for testcases
-	return new Sequence(annotations, "@","@","");
+	auto code = new Code(annotations);
+	for(auto a : *annotations)
+		*code << new SourceCodeSnippet(a,"@") << a << new NewLine(annotations);
+	return code;
 }
 
 CodeElement* JavaDeclarationGenerator::topLevelClass(OOModel::Class* c) const
 {
-	auto code = new Code(c);
-
-	return code;
+	auto file = new SourceFile(c,c->name(),"java");
+	*file << new Package(c) << c->subDeclarations() << c;
+	return file;
 }
 
 } /* namespace JavaExport */

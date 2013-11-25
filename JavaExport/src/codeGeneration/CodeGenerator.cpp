@@ -32,6 +32,7 @@
 #include "OOModel/src/expressions/Expression.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
+#include "OOModel/src/declarations/Project.h"
 
 
 
@@ -192,8 +193,22 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 
 		qDebug() << "\tprinting package";
 
-		//TODO:
-		Q_ASSERT(false && "not implemented package");
+		QString packageString;
+		bool first = true;
+		auto parent = package->parentDirectory();
+		while(parent && parent->owner() && !dynamic_cast<OOModel::Project*>(parent->owner()) )
+		{
+			bool emptyName = parent->name().isEmpty();
+			if(first && !emptyName) first = false;
+			else if(!emptyName) packageString.prepend(".");
+			packageString.prepend(parent->name());
+			parent = parent->parentDirectory();
+		}
+
+		package->sourceFile()->fileController()->print("package " + packageString);
+		package->sourceFile()->fileController()->printNewLine();
+		package->sourceFile()->fileController()->printNewLine();
+
 		map(package->sourceFile()->fileController()->cursor(),package->owner());
 
 		qDebug() << "\tfinished printing package";
