@@ -113,21 +113,16 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Module* module) const
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) const
 {
-	/*
-	 * //TODO: ask Mitko
-	 ATTRIBUTE_OOP_NAME_SYMBOL
-	 ATTRIBUTE(Modifier, modifiers, setModifiers)
-	 ATTRIBUTE_OOP_ANNOTATIONS
-	 ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
-
-	//import all
-	*/
 
 	auto code = new Code(import);
-	*code << "import " << import->importedName() << new NewLine(import);
+	*code << "import " << import->importedName();
+	if(import->importAll())
+		*code << ".*"; //TODO: test, check if "." is necessary...
+	*code << new NewLine(import);
 
 	*code << notAllowed(import->modifiers());
 	*code << notAllowed(import->subDeclarations());
+	*code << notAllowed(import->annotations());
 
 	return code;
 }
