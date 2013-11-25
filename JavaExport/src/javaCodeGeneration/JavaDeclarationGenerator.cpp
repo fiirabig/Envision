@@ -117,7 +117,7 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) con
 	auto code = new Code(import);
 	*code << "import " << import->importedName();
 	if(import->importAll())
-		*code << ".*"; //TODO: test, check if "." is necessary...
+		*code << ".*";
 	*code << new NewLine(import);
 
 	*code << notAllowed(import->modifiers());
