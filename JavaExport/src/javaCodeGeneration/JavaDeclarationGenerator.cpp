@@ -54,51 +54,32 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Field* field) const
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::Method* method) const
 {
-	/*
-	 * from declaration:
-	ATTRIBUTE_OOP_ANNOTATIONS //TODO: ask Mitko
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations) //TODO: ask Mitko
-	 *
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int) //TODO: ask mitko
-	 */
-
 	auto code = new Code(method);
-	*code << method->modifiers()
-		  << new Sequence(method->typeArguments(),"<",", ",">");
-
+	*code << notAllowed(method->subDeclarations());
+	*code << annotations(method->annotations());
+	*code << method->modifiers() << new Sequence(method->typeArguments(),"<",", ",">");
 
 	if(method->results()->size()==1)
 		*code << method->results() << " ";
-	//TODO: ask Mitko
-//	else if(method->results()== 0 && method->methodKind() == OOModel::Method::MethodKind::Constructor)
-//		*code << new Ignore(method->results());
-//	else
-//		*code << new NotAllowed(method->results(), "in Java a method can have only one result and this method has " +
-//				QString::number(method->results()->size()));
+	else if(method->results()->size() > 1)
+		*code << notAllowed(method->results());
 
-	//enum class MethodKind : int {Default, Constructor, Destructor, Conversion};
 	switch(method->methodKind())
 	{
-	case OOModel::Method::MethodKind::Default :
-	case OOModel::Method::MethodKind::Constructor :
-		//*code << new Ignore(method->mthKind()); TODO: ask Mitko to make CodeElementGenerator friend?
-		break;
-	case OOModel::Method::MethodKind::Destructor :
-		//*code << new NotAllowed(method->mthKind(), "There are no Destructors in Java");
-		break;
-	case OOModel::Method::MethodKind::Conversion :
-		//*code << new NotAllowed(method->mthKind(), "There are no Conversions in Java");
-		break;
-	default :
-		Q_ASSERT(false && "missing case in switch on MethodKind");
+		case OOModel::Method::MethodKind::Default :
+			//No check here, because for Java behavior is ok if this isn't set correctly for Constructor
+			break;
+		case OOModel::Method::MethodKind::Constructor :
+			if(method->results()->size() == 0) break;
+		case OOModel::Method::MethodKind::Destructor :
+		case OOModel::Method::MethodKind::Conversion :
+		default :
+			*code << notAllowed(method->results());
 	}
 
-	*code << method->name()
-		  << "(" << new Sequence(method->arguments(),", ") << ")";
-
+	*code << method->name() << "(" << new Sequence(method->arguments(),", ") << ")";
 	*code << method->items();
-
-	*code << method->memberInitializers();
+	*code << notAllowed(method->memberInitializers());
 
 	return code;
 }
