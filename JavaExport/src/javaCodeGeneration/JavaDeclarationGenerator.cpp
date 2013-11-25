@@ -33,6 +33,7 @@
 #include "OOModel/src/declarations/NameImport.h"
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
+#include "OOModel/src/elements/StatementItemList.h"
 
 namespace JavaExport
 {
@@ -43,14 +44,9 @@ JavaDeclarationGenerator::JavaDeclarationGenerator() : DeclarationGenerator(java
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::Field* field) const
 {
-	//TODO ask mitko about difference from VariableDeclaration
-	//TODO: try ; enter only here, instead of in vardecl
-
-	/*
-	ATTRIBUTE_OOP_ANNOTATIONS //TODO: ask Mitko
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations) //TODO: ask Mitko
-	 */
 	auto code = new Code(field);
+	*code << notAllowed(field->subDeclarations());
+	*code << annotations(field->annotations());
 	*code << generate(dynamic_cast<OOModel::VariableDeclaration*>(field))
 		  << ";" << new NewLine(field);
 	return code;
@@ -285,6 +281,19 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::ExplicitTemplateInstant
 {
 	//TODO: check with Mitko is this generics?
 	return notAllowed(declaration);
+}
+
+CodeElement* JavaDeclarationGenerator::annotations(OOModel::StatementItemList* annotations) const
+{
+	//TODO: check with Mitko for testcases
+	return new Sequence(annotations, "@","@","");
+}
+
+CodeElement* JavaDeclarationGenerator::topLevelClass(OOModel::Class* c) const
+{
+	auto code = new Code(c);
+
+	return code;
 }
 
 } /* namespace JavaExport */

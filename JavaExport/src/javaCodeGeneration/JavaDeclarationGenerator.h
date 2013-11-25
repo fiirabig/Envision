@@ -41,6 +41,7 @@ namespace OOModel
 	class VariableDeclaration;
 	class FormalTypeArgument;
 	class ExplicitTemplateInstantiation;
+	class StatementItemList;
 }
 
 namespace JavaExport
@@ -59,7 +60,9 @@ public:
 	virtual CodeElement* generate(OOModel::Project* declaration) const override;
 	virtual CodeElement* generate(OOModel::TypeAlias* declaration) const override;
 	virtual CodeElement* generate(OOModel::VariableDeclaration* declaration) const override;
-
+private:
+	CodeElement* annotations(OOModel::StatementItemList* annotations) const;
+	CodeElement* topLevelClass(OOModel::Class* c) const;
 };
 
 
