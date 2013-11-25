@@ -205,9 +205,12 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 			parent = parent->parentDirectory();
 		}
 
-		package->sourceFile()->fileController()->print("package " + packageString);
-		package->sourceFile()->fileController()->printNewLine();
-		package->sourceFile()->fileController()->printNewLine();
+		if(!packageString.isEmpty())
+		{
+			package->sourceFile()->fileController()->print("package " + packageString);
+			package->sourceFile()->fileController()->printNewLine();
+			package->sourceFile()->fileController()->printNewLine();
+		}
 
 		map(package->sourceFile()->fileController()->cursor(),package->owner());
 
@@ -252,8 +255,8 @@ CodeElement* CodeGenerator::print(CodeElement* element)
 		while(!container->content().isEmpty())
 		{
 			auto next = container->content().takeFirst();
-		//	qDebug() << "\t\tcontainer is " << container->toString();
-		//	qDebug() << "\t\ttaking first element from container and initializing it" << next->toString();
+			//	qDebug() << "\t\tcontainer is " << container->toString();
+			//	qDebug() << "\t\ttaking first element from container and initializing it" << next->toString();
 
 			if(!next->parentDirectory())
 			{
