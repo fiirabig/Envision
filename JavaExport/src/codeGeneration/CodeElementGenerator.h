@@ -27,6 +27,7 @@
 #pragma once
 #include "codeGeneration/Config.h"
 #include "codeGeneration/CodeElement.h"
+#include "OOModel/src/elements/Modifier.h"
 
 namespace Model
 {
@@ -64,6 +65,9 @@ inline CodeElement* CodeElementGenerator::notAllowed(Model::Node* node) const
 	if(auto list = dynamic_cast<Model::List*>(node))
 		if(list->size() == 0)
 			return new Ignore(list);
+	if(auto modifier = dynamic_cast<OOModel::Modifier*>(node))
+		if(modifier->get() == OOModel::Modifier::None)
+			return new Ignore(modifier);
 	return new NotAllowed(node, config_.notAllowedString());
 }
 

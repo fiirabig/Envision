@@ -88,7 +88,7 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::Module* module) const
 {
 	SourceDirectory* dir = new SourceDirectory(module,module->name());
 
-	*dir << new Ignore(module->modifiers()); //TODO:
+	*dir << notAllowed(module->modifiers());
 
 	*dir << notAllowed(module->annotations());
 	*dir << notAllowed(module->subDeclarations());
@@ -126,10 +126,7 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::NameImport* import) con
 	auto code = new Code(import);
 	*code << "import " << import->importedName() << new NewLine(import);
 
-	//TODO:
-//	if(import->modifiers())
-//		*code << new NotAllowed(import,"in Java imports don't have modifiers");
-
+	*code << notAllowed(import->modifiers());
 	*code << notAllowed(import->subDeclarations());
 
 	return code;
