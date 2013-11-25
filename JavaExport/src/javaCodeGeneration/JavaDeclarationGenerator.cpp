@@ -153,21 +153,14 @@ CodeElement* JavaDeclarationGenerator::generate(OOModel::TypeAlias* alias) const
 
 CodeElement* JavaDeclarationGenerator::generate(OOModel::VariableDeclaration* decl) const
 {
-	/*
-	 *
-	 *
-	 * //TODO: ask mitko
-	 *	ATTRIBUTE_OOP_NAME_SYMBOL
-	ATTRIBUTE_OOP_ANNOTATIONS
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
-	 */
 	auto code = new Code(decl);
+	*code << annotations(decl->annotations());
 	*code << decl->modifiers()  << decl->typeExpression() << " " << decl->name();
 
 	if(auto initValue = decl->initialValue())
 		*code << (" = ") << initValue;
 
-	//*code << ";" << new NewLine(decl); //TODO: check without ;
+	*code << notAllowed(decl->subDeclarations());
 	return code;
 }
 
