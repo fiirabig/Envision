@@ -53,47 +53,20 @@ namespace JavaExport {
 
 TEST(JavaExport, SimpleTest)
 {
-	/*
-	 * 	{
-		PersistentStore* store{};
 
-		if (i==0)
-		{
-
-			s->setBaseFolder(":/FilePersistence/test/persisted");
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
-			store = s;
-		}
-
-		typedef PersistedValue< QString >* String;
-		typedef PersistedValue< QList<PersistedNode*> >* Composite;
-
-		// Root Node
-		Composite root = dynamic_cast<Composite> (store->loadCompleteNodeSubtree("units", nullptr));
-	 */
-
-//	//PersistentStore* store{};
-//	auto s = new FilePersistence::SimpleTextFileStore();
-//	s->setBaseFolder("/home/marti/git/Envision/DebugBuild");
-//	//store = s;
-//
-//	//typedef Model::PersistedValue< QList<Model::PersistedNode*> >* Composite;
-//	auto root = dynamic_cast<Model::Node*> (s->loadCompleteNodeSubtree("marti", nullptr));
-
-	QString testDir = "/home/marti/git/Envision/DebugBuild";
+	//QString testDir = "/home/marti/git/Envision/DebugBuild";
+	QString testDir = "/home/marti/git/Envision/DebugBuild/persisted_tests";
 	Model::Model* model = new Model::Model();
 	FilePersistence::SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
-	model->load(&store, "marti",false);
+	//model->load(&store, "marti",false);
+	model->load(&store, "test",false);
+
 
 	JavaCodeGenerator generator;
 	generator.printSourceFiles(model->root(), "source_code");
+
 	CHECK_CONDITION(true);
 	Q_ASSERT(false && "test finished");
 }
