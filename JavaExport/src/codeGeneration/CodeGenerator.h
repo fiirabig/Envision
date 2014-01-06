@@ -25,9 +25,9 @@
  ***********************************************************************************************************************/
 #pragma once
 #include "FileController.h"
-#include "FileCreator.h"
 #include "Config.h"
 #include "CodeElement.h"
+#include "ASTMapper.h"
 
 namespace OOModel
 {
@@ -56,8 +56,9 @@ public:
 private:
 	bool removeDir(const QString & dirName);
 	CodeElement* print(CodeElement* element);
-	void map(FileController::Cursor cursor, Model::Node* node);
+	void map(CodeElement* element);
 	Config config_;
+	ASTMapper map_;
 
 	class ScopeElement : public CodeElement
 	{

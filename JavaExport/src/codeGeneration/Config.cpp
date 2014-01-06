@@ -36,12 +36,10 @@ Config::Config(QString indentString, ScopeLayout curlyBraces, ScopeLayout parent
 		languageName_(unimplementedString),
 		notAllowedString_(notAllowedString_)
 {
-	// TODO Auto-generated constructor stub
 }
 
 Config::~Config()
 {
-	// TODO Auto-generated destructor stub
 }
 
 

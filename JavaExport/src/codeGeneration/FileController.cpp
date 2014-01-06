@@ -36,7 +36,6 @@ FileController::FileController(Config config,SourceFile* file):
 				+ file->name() + "." + file->fileExtension()),
 		config_(config)
 {
-	qDebug() << file;
 	if(!qFile_.open(QIODevice::WriteOnly | QIODevice::Text))
 		Q_ASSERT(false && "can't open file");
 	stream_.setDevice(&qFile_);
@@ -50,18 +49,20 @@ FileController::~FileController()
 
 void FileController::print(const QString& text)
 {
-	qDebug() << "printing to file" << text << flush;
+	if(cursor_.symbol == 0){
+		for(int i = 0; i < indent_; i++) {
+			//print(config_.indentString());
+			stream_ << config_.indentString();
+			cursor_.advanceSymbol(config_.indentString().size());
+		}
+	}
 	stream_ << text;
 	cursor_.advanceSymbol(text.size());
-	//TODO: map
-	qDebug() << "finished printing to file" << flush;
 }
 
 void FileController::openScope(const ScopeLayout& scope)
 {
-
 	if(scope.newLineBeforOpen) printNewLine();
-	//qDebug() << scope.openString;
 	print(scope.openString);
 	if(scope.indented) indent_++;
 	if(scope.newLineAfterOpen) printNewLine();
@@ -79,7 +80,6 @@ void FileController::closeScope(const ScopeLayout& scope)
 void FileController::printIndent()
 {
 	Q_ASSERT(indent_ >= 0);
-
 	for(int i = 0; i < indent_; i++) {
 		print(config_.indentString());
 	}
@@ -89,7 +89,7 @@ void FileController::printNewLine()
 {
 	stream_ << endl;
 	cursor_.advanceLine();
-	printIndent();
+	//printIndent();
 }
 
 

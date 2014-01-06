@@ -39,12 +39,10 @@ namespace JavaExport
 DeclarationGenerator::DeclarationGenerator(Config config)
 	:CodeElementGenerator(config)
 {
-	// TODO Auto-generated constructor stub
 }
 
 DeclarationGenerator::~DeclarationGenerator()
 {
-	// TODO Auto-generated destructor stub
 }
 
 CodeElement* DeclarationGenerator::generate(OOModel::Declaration* declaration) const

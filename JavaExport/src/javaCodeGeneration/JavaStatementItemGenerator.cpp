@@ -110,7 +110,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::ForEachStatement* for
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::IfStatement* ifstmt) const
 {
-	//TODO: check if braces are ok with multi line then and else Branch
 	auto code = new Code(ifstmt);
 	*code << "if(" << ifstmt->condition() << ")" << ifstmt->thenBranch();
 	if(ifstmt->elseBranch()) *code << "else" << ifstmt->elseBranch();
@@ -120,7 +119,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::IfStatement* ifstmt) 
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::LoopStatement* loop) const
 {
-	//TODO: check if the ; are right && make sure to test empty init and update => while
 	auto code = new Code(loop);
 	if(!loop->initStep() && !loop->updateStep())
 		*code << "while(" << loop->condition() << ")";
@@ -151,7 +149,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::Statement* statement)
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::SwitchStatement* switchStmt) const
 {
-	//TODO: test, dont forget with and without default
 	auto code = new Code(switchStmt);
 	*code << "switch" << parenthesis(switchStmt, switchStmt->switchExpression()) << switchStmt->body();
 	return code;
@@ -159,7 +156,6 @@ CodeElement* JavaStatementItemGenerator::generate(OOModel::SwitchStatement* swit
 
 CodeElement* JavaStatementItemGenerator::generate(OOModel::TryCatchFinallyStatement* stmt) const
 {
-	//todo: test, with/without finally, one or more catchClause...
 	auto code = new Code(stmt);
 	*code << "try" << stmt->tryBody() << stmt->catchClauses() ;
 	if(stmt->finallyBody()->size())

@@ -34,12 +34,9 @@ ScopeLayout::ScopeLayout(QString open, QString close, bool indented,	bool newLin
 		newLineBeforOpen(newLineBeforOpen),newLineAfterOpen(newLineAfterOpen),
 		newLineBeforeClose(newLineBeforeClose),newLineAfterClose(newLineAfterClose)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 ScopeLayout::~ScopeLayout() {
-	// TODO Auto-generated destructor stub
 }
 
 } /* namespace JavaExport */

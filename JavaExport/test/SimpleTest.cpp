@@ -26,10 +26,12 @@
 
 #include "javaexport.h"
 
-//#include "filepersistence.h"
-//#include "FileStore.h"
-//#include "simple/SimpleTextFileStore.h"
-//#include "SelfTest/src/SelfTestSuite.h"
+#include "src/errorview.h"
+#include <QtCore/QProcess>
+
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/persistence/PersistedNode.h"
 #include "ModelBase/src/persistence/PersistedValue.h"
@@ -48,27 +50,25 @@
 #include "src/codeGeneration/FileController.h"
 
 using namespace OOModel;
-
+using namespace Visualization;
 namespace JavaExport {
 
 TEST(JavaExport, SimpleTest)
 {
 
-	//QString testDir = "/home/marti/git/Envision/DebugBuild";
 	QString testDir = "/home/marti/git/Envision/DebugBuild/persisted_tests";
 	Model::Model* model = new Model::Model();
-	FilePersistence::SimpleTextFileStore store;
-	store.setBaseFolder(testDir);
+	auto store = new FilePersistence::SimpleTextFileStore();
+	store->setBaseFolder(testDir);
 
-	//model->load(&store, "marti",false);
-	model->load(&store, "test",false);
+	model->load(store, "test",false);
 
 
 	JavaCodeGenerator generator;
 	generator.printSourceFiles(model->root(), "source_code");
 
 	CHECK_CONDITION(true);
-	Q_ASSERT(false && "test finished");
+
 }
 
 }

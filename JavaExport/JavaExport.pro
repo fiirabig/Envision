@@ -9,7 +9,9 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -loointeraction
-HEADERS += src/javaCodeGeneration/ExpressionGenerator.h \
+HEADERS += src/errorview.h \
+    src/codeGeneration/ASTMapper.h \
+    src/javaCodeGeneration/ExpressionGenerator.h \
     src/javaCodeGeneration/JavaDeclarationGenerator.h \
     src/codeGeneration/Config.h \
     src/codeGeneration/DeclarationGenerator.h \
@@ -24,21 +26,14 @@ HEADERS += src/javaCodeGeneration/ExpressionGenerator.h \
     src/codeGeneration/CodeElement.h \
     src/codeGeneration/CodeGenerator.h \
     src/codeGeneration/FileController.h \
-    src/codeGeneration/FileCreator.h \
-    src/StatementPrinter.h \
-    src/ExpressionPrinter.h \
-    src/ModifierPrinter.h \
-    src/ClassPrinter.h \
-    src/ProjectPrinter.h \
-    src/SourcePrinter.h \
     src/SourceToASTMap.h \
-    src/SourceBuilder.h \
     src/precompiled.h \
     src/JavaExportException.h \
     src/javaexport_api.h \
-    src/javaexport.h \
-    src/ModulePrinter.h
-SOURCES += src/javaCodeGeneration/ExpressionGenerator.cpp \
+    src/javaexport.h
+SOURCES += src/errorview.cpp \
+    src/codeGeneration/ASTMapper.cpp \
+    src/javaCodeGeneration/ExpressionGenerator.cpp \
     src/javaCodeGeneration/JavaDeclarationGenerator.cpp \
     src/codeGeneration/Config.cpp \
     src/codeGeneration/DeclarationGenerator.cpp \
@@ -53,16 +48,8 @@ SOURCES += src/javaCodeGeneration/ExpressionGenerator.cpp \
     src/codeGeneration/CodeElement.cpp \
     src/codeGeneration/CodeGenerator.cpp \
     src/codeGeneration/FileController.cpp \
-    src/codeGeneration/FileCreator.cpp \
-    src/StatementPrinter.cpp \
-    src/ExpressionPrinter.cpp \
-    src/ModifierPrinter.cpp \
-    src/ClassPrinter.cpp \
-    src/ProjectPrinter.cpp \
-    src/SourcePrinter.cpp \
     src/SourceToASTMap.cpp \
-    src/SourceBuilder.cpp \
     src/JavaExportException.cpp \
     src/javaexport.cpp \
-    src/ModulePrinter.cpp \
     test/SimpleTest.cpp
+FORMS = src/errorview.ui

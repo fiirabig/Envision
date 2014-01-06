@@ -46,7 +46,7 @@ class Config
 		const QString indentString_;
 		const ScopeLayout curlyBracesLayout_;
 		const ScopeLayout parenthesisLayout_;
-		const QString languageName_; //TODO: rename to
+		const QString languageName_;
 		const QString notAllowedString_;
 };
 

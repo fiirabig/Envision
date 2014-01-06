@@ -43,21 +43,15 @@ namespace JavaExport
 
 JavaElementGenerator::JavaElementGenerator() : ElementGenerator(javaConfig())
 {
-	// TODO Auto-generated constructor stub
 }
 
 JavaElementGenerator::~JavaElementGenerator()
 {
-	// TODO Auto-generated destructor stub
 }
 
 CodeElement* JavaElementGenerator::generate(OOModel::CatchClause* catchClause) const
 {
-	//ATTRIBUTE(Expression, exceptionToCatch, setExceptionToCatch)
-	//ATTRIBUTE(StatementItemList, body, setBody)
 
-	//TODO: exception has two bodies? ask mitko
-	//try {...} catch(Exception e) {...}
 	auto code = new Code(catchClause);
 	*code << "catch" << parenthesis(catchClause,catchClause->exceptionToCatch())
 			<< curlyBraces(catchClause,catchClause->body());
@@ -67,10 +61,6 @@ CodeElement* JavaElementGenerator::generate(OOModel::CatchClause* catchClause) c
 
 CodeElement* JavaElementGenerator::generate(OOModel::Enumerator* enumerator) const
 {
-//	ATTRIBUTE_OOP_NAME
-//	ATTRIBUTE(Expression, value, setValue)
-
-	//TODO: ask Mitko && test
 	auto code = new Code(enumerator);
 	*code << "enum" << enumerator->value();
 	return code;
@@ -78,8 +68,6 @@ CodeElement* JavaElementGenerator::generate(OOModel::Enumerator* enumerator) con
 
 CodeElement* JavaElementGenerator::generate(OOModel::FormalArgument* arg) const
 {
-
-//	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)
 
 	auto code = new Code(arg);
 	*code << arg->typeExpression() << " " << arg->name();
@@ -89,13 +77,12 @@ CodeElement* JavaElementGenerator::generate(OOModel::FormalArgument* arg) const
 CodeElement* JavaElementGenerator::generate(OOModel::FormalResult* result) const
 {
 	auto code = new Code(result);
-	*code << result->typeExpression(); //TODO: << new Ignore(result->name());
+	*code << result->typeExpression();
 	return code;
 }
 
 CodeElement* JavaElementGenerator::generate(OOModel::FormalTypeArgument* arg) const
 {
-	//TODO: Java can have more than one subtype
 	auto code = new Code(arg);
 	*code << arg->name();
 	if(arg->subTypeOfExpression()) *code << " extends " << arg->subTypeOfExpression();
@@ -105,7 +92,6 @@ CodeElement* JavaElementGenerator::generate(OOModel::FormalTypeArgument* arg) co
 
 CodeElement* JavaElementGenerator::generate(OOModel::MemberInitializer* node) const
 {
-	//TODO: ask Mitko
 	return notAllowed(node);
 }
 

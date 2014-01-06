@@ -32,13 +32,10 @@ namespace JavaExport
 
 CodeElement::CodeElement(Model::Node* owner) : owner_(owner)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 CodeElement::~CodeElement()
 {
-	// TODO Auto-generated destructor stub
 }
 
 } /* namespace JavaExport */

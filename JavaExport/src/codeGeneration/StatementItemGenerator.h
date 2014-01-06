@@ -65,8 +65,6 @@ public:
 	virtual CodeElement* generate(OOModel::SwitchStatement* statement) const;
 	virtual CodeElement* generate(OOModel::TryCatchFinallyStatement* statement) const;
 	virtual CodeElement* generate(OOModel::CaseStatement* statement) const;
-
-
 };
 
 } /* namespace JavaExport */

@@ -40,6 +40,7 @@ class FileController {
 		int symbol {};
 		void advanceLine(){ line++; symbol = 0; }
 		void advanceSymbol(int amount) { symbol += amount; }
+
 	};
 
 		FileController(Config config,SourceFile* file);
@@ -48,6 +49,7 @@ class FileController {
 		void printNewLine();
 		void openScope(const ScopeLayout&);
 		void closeScope(const ScopeLayout&);
+		QString fileName() const;
 		Cursor cursor() const;
 
 	private:
@@ -60,5 +62,10 @@ class FileController {
 };
 
 inline FileController::Cursor FileController::cursor() const {return cursor_; }
+
+inline QString FileController::fileName() const
+{
+	return qFile_.fileName();
+}
 
 } /* namespace JavaExport */

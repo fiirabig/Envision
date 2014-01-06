@@ -36,7 +36,6 @@ ExpressionGenerator::ExpressionGenerator(Config config): CodeElementGenerator(co
 
 ExpressionGenerator::~ExpressionGenerator()
 {
-	// TODO Auto-generated destructor stub
 }
 
 CodeElement* ExpressionGenerator::generate(Expression* expr) const
@@ -67,9 +66,6 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		*code << "\"" << stringLiteral->value() << "\"";
 
 	else if(auto arrayTypeExpression = dynamic_cast<ArrayTypeExpression*>(expr))
-	//TODO: Ask Mitko how arrays are supposed to be
-		//if(expr->fixedSize()) *code << notAllowed(expr->fixedSize());
-		//TODO: change not allowed so it ignores nullptrs
 		*code << arrayTypeExpression->typeExpression() << "[]";
 
 	else if(auto classTypeExpression = dynamic_cast<ClassTypeExpression*>(expr))
@@ -86,30 +82,29 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 			case PrimitiveType::CHAR: *code << "char"; break;
 			case PrimitiveType::VOID: *code << "void"; break;
 
-			case PrimitiveType::UNSIGNED_INT: Q_ASSERT(false); break; //TODO: add error
+			case PrimitiveType::UNSIGNED_INT: Q_ASSERT(false); break;
 			case PrimitiveType::UNSIGNED_LONG: Q_ASSERT(false); break;
 			default: Q_ASSERT(false && "PrimitiveType enum isn't implemented completely");
 		}
 	}
 
 	else if(auto autoTypeExpression = dynamic_cast<AutoTypeExpression*>(expr))
-		Q_ASSERT(false && autoTypeExpression); //TODO: add error
+		Q_ASSERT(false && autoTypeExpression);
 
 	else if(auto functionTypeExpression = dynamic_cast<FunctionTypeExpression*>(expr))
-		Q_ASSERT(false && functionTypeExpression); //TODO: add error
+		Q_ASSERT(false && functionTypeExpression);
 
 	else if(auto pointerTypeExpression = dynamic_cast<PointerTypeExpression*>(expr))
-		Q_ASSERT(false && pointerTypeExpression); 	//TODO:
+		Q_ASSERT(false && pointerTypeExpression);
 
 	else if(auto referenceTypeExpression = dynamic_cast<ReferenceTypeExpression*>(expr))
-		Q_ASSERT(false && referenceTypeExpression); //TODO:
+		Q_ASSERT(false && referenceTypeExpression);
 
 	else if(auto typeQualifierExpression = dynamic_cast<TypeQualifierExpression*>(expr))
-		Q_ASSERT(false && typeQualifierExpression);	//TODO: volatile const
+		Q_ASSERT(false && typeQualifierExpression);
 
 	else if(auto arrayInitializer = dynamic_cast<ArrayInitializer*>(expr))
 	{
-		//TODO: test
 		*code << " {";
 		bool first = true;
 		for(auto element : *arrayInitializer->values()) {
@@ -145,7 +140,6 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 			case BinaryOperation::CONDITIONAL_AND : *code << " && "; break;
 			case BinaryOperation::CONDITIONAL_OR : *code << " || "; break;
 			case BinaryOperation::ARRAY_INDEX : *code << "[)"; break;
-			//TODO: what does this mean?
 			case BinaryOperation::POINTER_TO_MEMBER : *code << "."; break;
 			case BinaryOperation::POINTER_POINTER_TO_MEMBER : *code << "."; break;
 			default :Q_ASSERT(false && "switch on BinaryOperation");
@@ -188,9 +182,9 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 				*code << "!" << unaryOperation->operand(); break;
 			case UnaryOperation::PARENTHESIS :
 				*code << "(" << unaryOperation->operand() << ")"; break;
-			case UnaryOperation::ADDRESSOF : //TODO: add error
+			case UnaryOperation::ADDRESSOF :
 			case UnaryOperation::DEREFERENCE :
-			case UnaryOperation::COMPLEMENT : //tODO: google
+			case UnaryOperation::COMPLEMENT :
 			default : Q_ASSERT(false && "switch on UnaryOperator");
 		}
 	}
@@ -220,7 +214,6 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 	}
 
 	else if(auto newExpression = dynamic_cast<NewExpression*>(expr))
-	//TODO: amount??? not null if array???? ask mitko
 	{
 		*code << "new " << newExpression->newType();
 		if(newExpression->amount())
@@ -270,42 +263,6 @@ CodeElement* ExpressionGenerator::generate(Expression* expr) const
 		*code << "throw " << throwExpr->expr();
 		return code;
 	}
-
-	/*
-	 *
-	}else if(auto deleteExpression = dynamic_cast<DeleteExpression*>(expr)) {
-		if(verbose) qDebug() << "expression is DeleteExpression";
-		//TODO:
-		Q_ASSERT(false && deleteExpression);
-
-
-	}else if(auto errorExpression = dynamic_cast<ErrorExpression*>(expr)) {
-		if(verbose) qDebug() << "expression is ErrorExpression";
-		//TODO:
-		Q_ASSERT(false && errorExpression);
-
-	}else if(auto lambdaExpression = dynamic_cast<LambdaExpression*>(expr)) {
-		if(verbose) qDebug() << "expression is LambdaExpression";
-		//TODO:
-		Q_ASSERT(false && lambdaExpression);
-
-	}else if(auto throwExpression = dynamic_cast<ThrowExpression*>(expr)) {
-		if(verbose) qDebug() << "expression is ThrowExpression";
-		//TODO:
-		Q_ASSERT(false && throwExpression);
-
-	}else if(auto typeTraitExpression = dynamic_cast<TypeTraitExpression*>(expr)) {
-		if(verbose) qDebug() << "expression is TypeTraitExpression";
-		//TODO:
-		Q_ASSERT(false && typeTraitExpression);
-
-	}else if(auto unfinishedOperator = dynamic_cast<UnfinishedOperator*>(expr)) {
-		if(verbose) qDebug() << "expression is UnfinishedOperator";
-		//TODO:
-		Q_ASSERT(false && unfinishedOperator);
-	 *
-	 */
-
 
 	else
 	{

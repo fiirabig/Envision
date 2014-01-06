@@ -120,7 +120,6 @@
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry">
 		<pathentry excluding="statementGenerators/|src/javaCodeGeneration/statementGenerators|codeGeneration|elementGenerators/|expressionGenerators/" kind="src" path=""/>
-		<pathentry kind="src" path="src/javaCodeGeneration/statementGenerators"/>
 		<pathentry include="/usr/include" kind="inc" path="" system="true"/>
 		<pathentry kind="out" path=""/>
 	</storageModule>

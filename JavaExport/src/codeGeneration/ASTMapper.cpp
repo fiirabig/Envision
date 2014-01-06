@@ -1,13 +1,13 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  ** following conditions are met:
  **
- **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the
- **      following disclaimer.
+ **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ **      disclaimer.
  **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  **      following disclaimer in the documentation and/or other materials provided with the distribution.
  **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
@@ -22,33 +22,34 @@
  ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
- **********************************************************************************************************************/
+ ***********************************************************************************************************************/
 
-/*
- * StatementPrinter.h
- *
- *  Created on: Jun 24, 2013
- *      Author: marti
- */
-
-#pragma once
-#include "SourcePrinter.h"
-#include "ExpressionPrinter.h"
-#include "OOModel/src/elements/StatementItem.h"
-#include "OOModel/src/elements/StatementItemList.h"
+#include "ASTMapper.h"
 
 namespace JavaExport {
 
-class StatementPrinter {
-	public:
-		StatementPrinter(SourcePrinter& printer, ExpressionPrinter* exprPrinter);
-		virtual ~StatementPrinter();
-		void print(OOModel::StatementItem* statement);
-		void printStatementItemList(OOModel::StatementItemList*);
-	private:
-		SourcePrinter& printer_;
-		ExpressionPrinter* expressionPrinter_;
-		void printStatement(OOModel::StatementItem* statement);
-};
+ASTMapper::ASTMapper() {}
+
+ASTMapper::~ASTMapper() {}
+
+void ASTMapper::add(CodeElement* element) {
+	auto filename = element->sourceFile()->fileController()->fileName();
+	auto cursor = element->sourceFile()->fileController()->cursor();
+	Sequence s(cursor,element->owner());
+	auto list = map_.take(filename);
+	list.append(s);
+	map_.insert(filename,list);
+}
+
+Model::Node* ASTMapper::get(QString filename,int line, int symbol) {
+	auto list = map_.value(filename);
+
+	for(auto seq : list)
+	{
+		if(seq.end.line >= line && seq.end.symbol >= symbol)
+			return seq.node;
+	}
+	return list.last().node;
+}
 
 } /* namespace JavaExport */

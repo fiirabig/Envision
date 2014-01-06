@@ -25,7 +25,6 @@
  ***********************************************************************************************************************/
 
 #include "StatementItemGenerator.h"
-
 #include "OOModel/src/elements/StatementItem.h"
 #include "OOModel/src/statements/Block.h"
 #include "OOModel/src/statements/BreakStatement.h"

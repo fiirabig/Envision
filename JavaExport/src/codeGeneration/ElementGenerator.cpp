@@ -45,12 +45,10 @@ namespace JavaExport
 
 ElementGenerator::ElementGenerator(Config config) : CodeElementGenerator(config)
 {
-	// TODO Auto-generated constructor stub
 }
 
 ElementGenerator::~ElementGenerator()
 {
-	// TODO Auto-generated destructor stub
 }
 
 
